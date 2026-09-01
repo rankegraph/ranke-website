@@ -1,0 +1,9 @@
+
+# sindri hub artifacts (agent worktrees + hub state) — not for the repo
+.worktrees/
+.todos/
+
+# build output, once the docs section has one
+dist/
+build/
+bin/
