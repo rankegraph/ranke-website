@@ -65,6 +65,7 @@ jobs:
       # warns rather than failing the job: the release itself published, and
       # `make release` waits on this run to say whether it did.
       - name: Tell the host to deploy
+        id: hook
         env:
           HOOK_URL: https://rankegraph.org/_hooks/website
           HOOK_SECRET: ${{ secrets.WEBSITE_HOOK_SECRET }}
@@ -74,14 +75,56 @@ jobs:
           set -uo pipefail
           if [ -z "$HOOK_SECRET" ]; then
             echo "::warning::WEBSITE_HOOK_SECRET is unset — the host will pick this release up on its own timer"
+            echo "posted=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           body=$(printf '{"action":"published","release":{"tag_name":"%s"},"repository":{"full_name":"%s"}}' "$TAG" "$REPO")
           mac=$(printf '%s' "$body" | openssl dgst -sha256 -hmac "$HOOK_SECRET" -r | cut -d' ' -f1)
-          curl -fsS --retry 3 --retry-delay 5 --retry-all-errors \
-            -X POST "$HOOK_URL" \
-            -H 'Content-Type: application/json' \
-            -H 'X-GitHub-Event: release' \
-            -H "X-Hub-Signature-256: sha256=$mac" \
-            --data-raw "$body" \
-          || echo "::warning::the deploy hook did not answer — the host's timer will fetch this release within fifteen minutes"
+          if answer=$(curl -fsS --retry 3 --retry-delay 5 --retry-all-errors \
+              -X POST "$HOOK_URL" \
+              -H 'Content-Type: application/json' \
+              -H 'X-GitHub-Event: release' \
+              -H "X-Hub-Signature-256: sha256=$mac" \
+              --data-raw "$body"); then
+            echo "called the deploy hook: $HOOK_URL accepted the signature${answer:+ — $answer}"
+            echo "posted=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::the deploy hook did not answer — the host's timer will fetch this release within fifteen minutes"
+            echo "posted=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Every page states the build it came from, so the site is its own receipt:
+      # when the front page says this tag, the host has fetched the release,
+      # unpacked it and is serving it. Nothing here trusts the hook's 200 — that
+      # only says the listener accepted the trigger.
+      #
+      # Skipped when nothing was posted, rather than waiting out the host's
+      # fifteen-minute timer on a runner.
+      #
+      # A tag the site never serves warns instead of failing, for the reason the
+      # hook step does: the release itself published, its assets are good, and
+      # `make release` reads a red run here as a failed release.
+      - name: Wait for the site to serve it
+        if: steps.hook.outputs.posted == 'true'
+        env:
+          SITE_URL: https://rankegraph.org/
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -uo pipefail
+          echo "waiting for $SITE_URL to serve $TAG…"
+          for attempt in $(seq 1 30); do
+            # The query string defeats any cache between here and the docroot;
+            # a static file ignores it.
+            page=$(curl -fsS --max-time 10 -H 'Cache-Control: no-cache' \
+              "$SITE_URL?deploy-check=$TAG.$attempt" || true)
+            # -F, because a version string is full of regex metacharacters. The
+            # trailing '<' pins the match to the whole tag: v0.1.0 must not
+            # answer for v0.1.10.
+            if printf '%s' "$page" | grep -Fq "Built from $TAG<"; then
+              echo "website $TAG is now online — $SITE_URL"
+              exit 0
+            fi
+            echo "  not yet (attempt $attempt/30)"
+            sleep 10
+          done
+          echo "::warning::$SITE_URL is not serving $TAG after five minutes — the host's timer will retry"
