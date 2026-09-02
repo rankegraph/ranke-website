@@ -500,3 +500,47 @@ footer {
 .glossary dt .term { font-weight: 600; text-decoration: none; }
 .glossary dt .term:hover { text-decoration: underline; }
 .glossary dd { margin: 0.25rem 0 0; color: var(--muted); }
+
+/* Where a section holds several entries, each entry's heading needs air above
+   it that the first one, sitting under the section's own h2, does not. */
+.props + h3 { margin-top: 2.2rem; }
+
+/* ── the neighbours list ────────────────────────────────────────────── */
+
+/* One row per system, opened for detail. The logo column is held whether
+   or not a project has a logo, so every name starts on the same axis. */
+.nb { border-top: 1px solid var(--rule); }
+.nb:last-of-type { border-bottom: 1px solid var(--rule); }
+
+.nb > summary {
+	display: grid;
+	grid-template-columns: 2.4rem 1fr auto;
+	gap: 0.1rem 1.1rem;
+	padding: 1rem 0;
+	cursor: pointer;
+	list-style: none;
+}
+.nb > summary::-webkit-details-marker { display: none; }
+.nb > summary:hover .nb-name { color: var(--accent); }
+
+.nb-logo { grid-row: 1 / span 2; align-self: center; width: 2.4rem; height: 2.4rem; object-fit: contain; }
+.nb-name { font-weight: 600; }
+.nb-gist { grid-column: 2; color: var(--muted); font-size: 0.95rem; }
+
+/* The marker states which way the row will move when it is clicked. */
+.nb > summary::after {
+	grid-column: 3;
+	grid-row: 1 / span 2;
+	align-self: center;
+	content: "+";
+	color: var(--muted);
+	font-size: 1.1rem;
+}
+.nb[open] > summary::after { content: "\2212"; }
+
+.nb > .props { padding: 0.8rem 0 0 3.5rem; }
+.nb-visit { margin: 1.1rem 0 1.4rem 3.5rem; font-size: 0.95rem; }
+
+@media (max-width: 44rem) {
+	.nb > .props, .nb-visit { padding-left: 0; margin-left: 0; }
+}

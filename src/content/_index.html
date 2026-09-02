@@ -40,7 +40,9 @@ So every record carries two dates: when it entered the archive and its presumed 
     Digital systems keep history: git every version of a file, an issue tracker every comment,
     a build system its logs. Each keeps its own, under its own policy: one squashes, one prunes
     after ninety days, one is append-only, and several cannot be exported at all. The history is
-    scattered, and no system holds what runs across them.
+    scattered, and no system holds what runs across them. A
+    <a href="/neighbours.html">page of neighbours</a> takes these systems one at a time
+    and says what each is for.
   </p>
 </section>
 
@@ -84,6 +86,28 @@ So every record carries two dates: when it entered the archive and its presumed 
 	<p>An agent can extend the graph as readily as read it. Its analysis runs on a branch of its own: it adds claims, cites the records it read, and leaves the sources untouched. Whoever reviews it later can see every record the analysis drew on.</p>
 </section>
 //-->
+
+<section>
+	<h2>What it aligns with</h2>
+	<div class="rows">
+		<div>
+			<a href="https://www.w3.org/TR/prov-dm/">W3C PROV-DM</a>
+			<span class="what">The standard vocabulary for provenance: entities, activities, agents. A
+			Ranke-Graph maps onto it, and holds the provenance in the same graph as the content.</span>
+		</div>
+		<div>
+			<a href="https://caseontology.org/">CASE and UCO</a>
+			<span class="what">How a cyber investigation is described: chain of custody, meaning who
+			handled the data, when and where, and chain of evidence, meaning which tools treated it. The
+			same discipline, written for investigators.</span>
+		</div>
+		<div>
+			<a href="https://www.loc.gov/standards/datetime/">EDTF</a>
+			<span class="what">The Library of Congress's format for a date known only approximately,
+			which is what the presumed date of origin needs.</span>
+		</div>
+	</div>
+</section>
 
 <section>
 	<h2>Where to go next</h2>

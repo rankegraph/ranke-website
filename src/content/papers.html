@@ -11,20 +11,20 @@ url: /papers.html
 <section>
 	<h2>The papers</h2>
 	<div class="cards">
-		<article class="card">
-			<div class="meta">Paper 01 &middot; draft</div>
+		<article class="card" id="foundation">
+			<div class="meta">Paper 01 &middot; the foundation paper &middot; draft</div>
 			<h3>Ranke-Graph: A Provenance-First Data Structure</h3>
 			<p>Defines the graph as an abstract data type: what a claim is, how its identity is computed, and which guarantees follow from that alone. The minimum contract an implementation has to keep.</p>
 			<a href="https://github.com/rankegraph/ranke-graph/releases/latest/download/01-ranke-graph.pdf">Read the PDF</a>
 		</article>
-		<article class="card">
+		<article class="card" id="rankedb">
 			<div class="meta">Paper 02 &middot; draft</div>
 			<h3>RankeDB: Serving the Ranke-Graph</h3>
 			<p>Takes that contract as given and specifies a server for it: how a graph is persisted across interchangeable backends, composed, queried, verified, and bounded for access.</p>
 			<a href="https://github.com/rankegraph/ranke-graph/releases/latest/download/02-ranke-db.pdf">Read the PDF</a>
 		</article>
 	</div>
-	<p>Three more are sketched and unwritten: workers that populate the graph, retrieval strategies over it, and coordination between several agents working on one archive. They exist as titles and notes, nothing more.</p>
+	<p id="unwritten">Three more are sketched and unwritten: workers that populate the graph, retrieval strategies over it, and coordination between several agents working on one archive. They exist as titles and notes, nothing more.</p>
 </section>
 
 <section>
@@ -34,7 +34,7 @@ url: /papers.html
 			<a href="https://github.com/rankegraph/ranke-graph/releases/latest/download/ranke-glossary.pdf">Glossary</a>
 			<span class="what">The series' terminology in one place.</span>
 		</div>
-		<div>
+		<div id="specification">
 			<a href="https://github.com/rankegraph/ranke-graph/releases/latest/download/ranke-spec.pdf">Normative specification</a>
 			<span class="what">The rules an implementation follows. Written for implementers rather than readers.</span>
 		</div>

@@ -55,3 +55,17 @@ The format those chapters are written in is the Ranke Documentation Format,
 specified in ranke-graph's `docs-spec/`. This repository is bound by it twice
 over: as the author of the HTML backend, and as the author of chapters of its
 own.
+
+## Licence
+
+The site's content and design are published under CC BY 4.0, which is what the
+footer of every page states, and matches the papers in ranke-graph. `LICENSE`
+carries that text.
+
+The code that builds the site is Apache 2.0, in `LICENSE-CODE`: the Hugo
+layouts and partials, the scripts under `src/scripts/`, the Go tools under
+`src/tools/`, and `bin/`. Creative Commons advise against their licences for
+software, so the two are kept apart.
+
+The logos under `src/static/assets/logos/` belong to the projects they name and
+are neither.

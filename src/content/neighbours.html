@@ -1,0 +1,365 @@
+---
+title: "Neighbours"
+description: "What the systems around Ranke-Graph are each for: version control, databases, agent memory, supply-chain evidence, incident forensics, preservation, content addressing and transparency logs."
+url: /neighbours.html
+---
+<section>
+	<h1>Neighbours</h1>
+	<p class="lead">Systems that keep history, and what each one is for. Several overlap with Ranke,
+	and some are further along at the job this site describes. Each entry says where.</p>
+</section>
+
+<section>
+	<h2>How to read this</h2>
+	<p>Every entry answers the same four questions: what the system is for, where it goes further
+	than Ranke, where Ranke goes further, and how the two compose. Open an entry to read them.</p>
+	<p>The fourth answer describes a composition that is possible rather than built.
+	<code>ranke-git</code> is the only adapter that exists today, so everything else under
+	<i>Together</i> is a design sketch, and the entries say so where it matters.</p>
+</section>
+
+<section>
+	<h2>Version control</h2>
+
+	<details class="nb">
+		<summary>
+		<img class="nb-logo" src="/assets/logos/git.png" alt="" width="96" height="96">
+		<span class="nb-name">git</span>
+		<span class="nb-gist">Version control for source trees, and a Merkle DAG underneath</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>Git records how a source tree changed and lets many people change it at once: a Merkle DAG of trees and commits, tuned for the working practice of writing software.</span></li>
+			<li><b>Where it goes further</b> <span>Branching, merging, diffing, blame, rebase. Everything you do to code while you are writing it, which Ranke leaves alone.</span></li>
+			<li><b>Where Ranke goes further</b> <span>A repository's history is its own. A squash or a force-push drops what it drops, and nothing in the repository links a commit to the scan that passed it, the ticket that asked for it, or the decision that shipped it.</span></li>
+			<li><b>Together</b> <span><code>ranke-git</code> snapshots a repository into an archive, byte-identical, and the commits sit beside the other records of the same release. This is the one adapter that exists today.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://git-scm.com/">git-scm.com</a></p>
+	</details>
+
+	<details class="nb">
+		<summary>
+		<img class="nb-logo" src="/assets/logos/terminusdb.png" alt="" width="96" height="96">
+		<span class="nb-name">TerminusDB</span>
+		<span class="nb-gist">Git-like branching and time travel over an RDF knowledge graph</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>TerminusDB gives an RDF knowledge graph git-like versioning: branch, merge and time travel, over append-only delta encoding.</span></li>
+			<li><b>Where it goes further</b> <span>Versioning as a workflow on a schema'd knowledge graph, shipping today. Branch a whole database, merge it back, query any past state.</span></li>
+			<li><b>Where Ranke goes further</b> <span>The <a href="/papers.html#foundation">foundation paper</a> puts the difference at what changed against why. TerminusDB records the revisions and carries no derivation chain, no archive of the sources a revision was built from, and no contributor whose authorship is verifiable.</span></li>
+			<li><b>Together</b> <span>Both hold a versioned graph. An archive beneath one would keep the sources its revisions were drawn from.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://terminusdb.com/">terminusdb.com</a></p>
+	</details>
+</section>
+
+<section>
+	<h2>Databases</h2>
+
+	<details class="nb">
+		<summary>
+		<img class="nb-logo" src="/assets/logos/neo4j.png" alt="" width="96" height="96">
+		<span class="nb-name">Neo4j</span>
+		<span class="nb-gist">Property graph database, queried with Cypher, updated in place</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>Neo4j stores a property graph and queries it: traversals over relationships at speed, with Cypher, indexes and transactions, updated in place.</span></li>
+			<li><b>Where it goes further</b> <span>Query planning, traversal performance, and the tooling built around them over two decades. An archive kept in Neo4j inherits all of it.</span></li>
+			<li><b>Where Ranke goes further</b> <span>A property graph holds the current value of a property. A Ranke-Graph holds every claim ever made about it, each signed, each citing what it was built from, and each permanent.</span></li>
+			<li><b>Together</b> <span>Neo4j is one of the backends RankeDB writes to, and Graphiti runs on it as well: one store underneath two disciplines.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://neo4j.com/">neo4j.com</a></p>
+	</details>
+
+	<details class="nb">
+		<summary>
+		<span class="nb-logo"></span>
+		<span class="nb-name">Datomic</span>
+		<span class="nb-gist">Immutable facts on one system timeline, with the database as a value</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>Datomic keeps immutable facts along a single system timeline. A query runs against the database as a value, and any earlier point is reachable with as-of.</span></li>
+			<li><b>Where it goes further</b> <span>A schema, Datalog queries and transactions, with time travel on the ordinary query path.</span></li>
+			<li><b>Where Ranke goes further</b> <span>One timeline, and it is the system's own. Datomic records when a fact was asserted or retracted, and not who derived it from what. The <a href="/papers.html#foundation">foundation paper</a> calls that temporal history against epistemic history.</span></li>
+			<li><b>Together</b> <span>An immutable store beneath an archive is a reasonable fit, with the archive supplying the derivation the datoms have nowhere to put.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://www.datomic.com/">datomic.com</a></p>
+	</details>
+
+	<details class="nb">
+		<summary>
+		<img class="nb-logo" src="/assets/logos/xtdb.png" alt="" width="96" height="96">
+		<span class="nb-name">XTDB</span>
+		<span class="nb-gist">Immutable database with a valid-time axis beside transaction time</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>XTDB is an immutable database with two time axes: transaction time, when the database was told, and valid time, when the fact held in the world. Writes can be made retroactively along valid time.</span></li>
+			<li><b>Where it goes further</b> <span>Bitemporal SQL with time travel as an ordinary query, over a schemaless document model.</span></li>
+			<li><b>Where Ranke goes further</b> <span>Those two axes are the archive's two dates under other names, and archival practice reached them first; the Library of Congress standardised the uncertain half as EDTF. What the schema has no place for is the derivation: which claims a record was built from, and who built it.</span></li>
+			<li><b>Together</b> <span>Bitemporality is the shared idea. An archive adds the chain of derivation to it.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://xtdb.com/">xtdb.com</a></p>
+	</details>
+
+	<details class="nb">
+		<summary>
+		<img class="nb-logo" src="/assets/logos/fluree.png" alt="" width="96" height="96">
+		<span class="nb-name">Fluree</span>
+		<span class="nb-gist">RDF graph over a hash-chained commit log</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>Fluree is an RDF graph database on a hash-chained commit log: every
+			commit is kept and addressed by its content, and any earlier state stays queryable.
+			Transactions can be signed as JWS or presented as Verifiable Credentials, SHACL validation and
+			OWL reasoning are built in, and it queries with SPARQL. The engine is an embeddable Rust
+			library under the Business Source Licence, which converts to Apache 2.0 on a change date, and a
+			separate server runs it in a consensus cluster; Fluree AI is the managed platform on
+			top.</span></li>
+			<li><b>Where it goes further</b> <span>A working database around the immutable log: a query
+			surface, a reasoner, validation, policy, and Raft for distributed deployment. Ranke has a data
+			structure and two reference implementations.</span></li>
+			<li><b>Where Ranke goes further</b> <span>The sharpest line is the licence. Fluree's engine
+			is source-available under the Business Source Licence, which reserves commercial use until its
+			change date, with a managed platform sold above it. Ranke's implementations are Apache 2.0 and
+			its papers CC BY 4.0, so an archive can be run, forked and outlived by whoever holds it. After
+			that comes signing: optional in Fluree, so authorship is a feature a transaction may carry,
+			where Ranke folds the signature into a claim's identity and an unsigned claim is not a claim.
+			And Fluree versions a database, where Ranke's unit is a claim citing what it was derived
+			from.</span></li>
+			<li><b>Together</b> <span>The nearest neighbour among the databases. Underneath the platform
+			framing sits a hash-chained log with optional verification, and that log is a reasonable store
+			beneath an archive.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://flur.ee/">flur.ee</a></p>
+	</details>
+</section>
+
+<section>
+	<h2>Agent memory</h2>
+
+	<details class="nb">
+		<summary>
+		<img class="nb-logo" src="/assets/logos/zep.png" alt="" width="96" height="96">
+		<span class="nb-name">Zep</span>
+		<span class="nb-gist">Agent memory: a bi-temporal knowledge graph built from episodes</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>Zep, and Graphiti underneath it, gives an agent a memory: episodes come in, an LLM extracts entities and facts, and every edge carries a validity interval so the agent can be handed what currently holds. It runs on Neo4j, FalkorDB or Amazon Neptune.</span></li>
+			<li><b>Where it goes further</b> <span>Extraction, entity resolution and contradiction handling are built and running, and retrieval is tuned to hand an agent one current view. Nothing in Ranke does this today: the workers that would populate its semantic layer are a <a href="/papers.html#unwritten">paper still to be written</a>.</span></li>
+			<li><b>Where Ranke goes further</b> <span>Ranke carries the semantic layer in the structure itself, as relations held as claims and read with their direction. Graphiti updates entity summaries destructively, and holds provenance as annotation on the knowledge graph rather than as its content, where a Ranke-Graph keeps the sources inside itself, content-addressed, and every claim about them stays exactly as written.</span></li>
+			<li><b>Together</b> <span>The closest neighbour here, and the <a href="/papers.html#foundation">foundation paper</a> says so: it reads the Ranke-Graph as an extension of Graphiti's philosophy, adding immutability, sources kept within the graph, and provenance as the substrate. Both run on Neo4j, so one store can hold either.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://www.getzep.com/">getzep.com</a></p>
+	</details>
+</section>
+
+<section>
+	<h2>Supply-chain evidence</h2>
+
+	<details class="nb">
+		<summary>
+		<img class="nb-logo" src="/assets/logos/chainloop.png" alt="" width="96" height="96">
+		<span class="nb-name">Chainloop</span>
+		<span class="nb-gist">Evidence store and policy engine wired into CI pipelines</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>Chainloop is an evidence store and policy engine for the software lifecycle. It collects attestations, SBOMs, VEX, SARIF and QA reports out of GitHub Actions, GitLab, Jenkins, CircleCI and TeamCity together with the build environment's own metadata, stores each attestation as a Sigstore bundle, keeps the materials in content-addressed storage, and evaluates Rego policies whose results are written into the attestation before it is signed. A Workflow Contract declares what evidence a pipeline has to produce.</span></li>
+			<li><b>Where it goes further</b> <span>For the release-documentation case this site opens with, Chainloop is the more finished answer today: pipeline integrations, contracts that fail a build when evidence goes missing, policy evaluation, and compliance reporting on top. Ranke has one adapter, for git.</span></li>
+			<li><b>Where Ranke goes further</b> <span>Three places. Its scope is the software lifecycle, so the mail thread, the GPS trace and the analysis written a year later have nowhere to go. Its graph belongs to the service: the attestations verify on their own with cosign, while the relationships between them live in the control plane's database, where a Ranke claim carries its edges inside the record its id is computed over. And it decides, by design, because a contract that fails a build is the product; the <a href="/papers.html#foundation">foundation paper</a> draws the opposite line, that the graph documents and does not decide.</span></li>
+			<li><b>Together</b> <span>An adapter over Chainloop would be the shortest path from a working pipeline to an archive that outlives the tool. The gate stays in the pipeline where it belongs, and the record of what it saw goes somewhere a later claim can contradict it with both staying readable.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://chainloop.dev/">chainloop.dev</a></p>
+	</details>
+
+	<details class="nb">
+		<summary>
+		<img class="nb-logo" src="/assets/logos/archivista.png" alt="" width="96" height="96">
+		<span class="nb-name">Archivista and Witness</span>
+		<span class="nb-gist">Signed in-toto attestations, produced in the pipeline and served from a store</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>Archivista stores and serves signed in-toto attestations, and Witness produces them in the pipeline: what was built, from which inputs, by which steps. Together they answer supply-chain questions and feed policy checks.</span></li>
+			<li><b>Where it goes further</b> <span>One question, worked all the way through, inside the in-toto and CNCF ecosystem: attestation formats a wider community already verifies, and policy evaluation against them.</span></li>
+			<li><b>Where Ranke goes further</b> <span>Ranke takes any source. The attestation, the mail thread that argued about it, the GPS trace, the analysis written a year later: one archive, one derivation model.</span></li>
+			<li><b>Together</b> <span>An attestation is a signed claim that cites its inputs, which is a Ranke claim in every respect that matters. An adapter over Archivista would put supply-chain evidence beside everything else the release touched.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://github.com/in-toto/archivista">github.com</a></p>
+	</details>
+
+	<details class="nb">
+		<summary>
+		<img class="nb-logo" src="/assets/logos/guac.png" alt="" width="96" height="96">
+		<span class="nb-name">GUAC</span>
+		<span class="nb-gist">One queryable graph from SBOMs, SLSA attestations and Scorecard data</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>GUAC aggregates SBOMs, SLSA attestations, Scorecard results and deps.dev data into one queryable graph, through collectors and an ingestor that normalises them into a common model. Its stated aim is what you do not know about your supply chain.</span></li>
+			<li><b>Where it goes further</b> <span>Normalising the ecosystem's formats into one graph and answering questions across them: which artefact carries which dependency, and where the data is missing altogether. It is an OpenSSF project with adopters, where Ranke has no supply-chain adapter at all.</span></li>
+			<li><b>Where Ranke goes further</b> <span>GUAC builds a current picture from documents it re-reads. Ranke keeps the documents, dates them twice, and keeps every earlier picture beside the current one.</span></li>
+			<li><b>Together</b> <span>GUAC's collectors and Ranke's adapters work the same seam. A graph GUAC built is a derivation like any other, and filing it as one would keep the answer it gave on the day it was asked.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://guac.sh/guac/">guac.sh</a></p>
+	</details>
+</section>
+
+<section>
+	<h2>Incident forensics</h2>
+
+	<details class="nb">
+		<summary>
+		<img class="nb-logo" src="/assets/logos/velociraptor.png" alt="" width="96" height="96">
+		<span class="nb-name">Velociraptor</span>
+		<span class="nb-gist">Forensic artefact collection across a fleet of endpoints</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>Velociraptor hunts for forensic artefacts across a fleet of endpoints. An analyst writes a VQL query, starts a hunt, and agents on every enrolled machine answer within minutes. It also collects events continuously and keeps them centrally for later review. It descends from Google's GRR.</span></li>
+			<li><b>Where it goes further</b> <span>Getting the evidence off the machines at all: agents, a query language for artefacts, and the scale to run it over a fleet while an incident is live. Ranke has nothing that collects anything.</span></li>
+			<li><b>Where Ranke goes further</b> <span>What a hunt returns is a collection. In a Ranke-Graph each item would carry a contributor, an entry date, a presumed date of origin, and edges to whatever it was derived from, so an analysis of it is filed beside it rather than kept elsewhere. The structure holds that for anything ingested; no adapter for Velociraptor exists.</span></li>
+			<li><b>Together</b> <span>Collection and custody are different jobs, and Velociraptor is among the first adapters an archive of this kind would want.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://docs.velociraptor.app/">docs.velociraptor.app</a></p>
+	</details>
+
+	<details class="nb">
+		<summary>
+		<span class="nb-logo"></span>
+		<span class="nb-name">Timesketch and Plaso</span>
+		<span class="nb-gist">One searchable timeline from many forensic sources, annotated by a team</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>Timesketch, with Plaso underneath it, builds one searchable timeline from many sources: supertimelines, KAPE and Velociraptor output, ELK exports, Sysmon logs, plain CSV. Analysts tag, annotate and build stories on it together, and built-in analysers flag patterns such as lateral movement.</span></li>
+			<li><b>Where it goes further</b> <span>The analytical surface of an investigation in progress: correlation across sources, collaborative annotation, and a timeline a human can work. Ranke offers no analysis tooling of any kind.</span></li>
+			<li><b>Where Ranke goes further</b> <span>A sketch is built for a case. An archive would keep the evidence base across cases, hold each annotation as a claim with its own author and time, and keep the sources the timeline was derived from. No adapter for Timesketch exists.</span></li>
+			<li><b>Together</b> <span>A sketch is a derivation over sources. Filed as claims, the reasoning of an investigation would survive the investigation.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://timesketch.org/">timesketch.org</a></p>
+	</details>
+
+	<details class="nb">
+		<summary>
+		<img class="nb-logo" src="/assets/logos/dfir-iris.png" alt="" width="96" height="96">
+		<span class="nb-name">DFIR-IRIS</span>
+		<span class="nb-gist">Incident case management with evidence and chain of custody</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>DFIR-IRIS runs incident cases: summaries, notes, assets, indicators, tasks and evidence. Each evidence entry records the acquisition timestamp, the analyst who collected it, where it is stored and a SHA-256, and a case can be turned into a report. TheHive covers similar ground under a licence that narrowed in 2022.</span></li>
+			<li><b>Where it goes further</b> <span>The case as a working object, with the reporting that has to come out of it at the end.</span></li>
+			<li><b>Where Ranke goes further</b> <span>Custody in IRIS is a field on a record inside one case. In a Ranke-Graph custody is the structure: the contributor is signed into the claim's identity, and a claim cannot be written without citing what it rests on.</span></li>
+			<li><b>Together</b> <span>The same discipline at two altitudes. A case would be a branch, and its evidence entries claims.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://www.dfir-iris.org/">dfir-iris.org</a></p>
+	</details>
+</section>
+
+<section>
+	<h2>Preservation</h2>
+
+	<details class="nb">
+		<summary>
+		<span class="nb-logo"></span>
+		<span class="nb-name">Archivematica</span>
+		<span class="nb-gist">OAIS preservation: accession, normalise, and package for a repository</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>Archivematica runs institutional preservation to the OAIS model: material is accessioned, formats are normalised by policy, and archival packages come out in METS, PREMIS and BagIt for any repository to hold.</span></li>
+			<li><b>Where it goes further</b> <span>Keeping bytes readable for decades. Format identification and normalisation, fixity checking, and the ingest workflow archivists actually run. Ranke has none of this.</span></li>
+			<li><b>Where Ranke goes further</b> <span>Ranke is concerned with what records say and where claims came from: derivation as queryable data, with later analysis filed as claims of its own.</span></li>
+			<li><b>Together</b> <span>Preservation and provenance are different jobs on the same material. An archival package is a source like any other.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://www.archivematica.org/">archivematica.org</a></p>
+	</details>
+</section>
+
+<section>
+	<h2>Content addressing</h2>
+
+	<details class="nb">
+		<summary>
+		<img class="nb-logo" src="/assets/logos/ipfs.png" alt="" width="96" height="96">
+		<span class="nb-name">IPFS</span>
+		<span class="nb-gist">Content addressed by a hash over its bytes, distributed between peers</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>IPFS addresses immutable content by a hash over its bytes and moves it between peers, so a name verifies what it names wherever it is fetched from.</span></li>
+			<li><b>Where it goes further</b> <span>Distribution and storage at scale, which Ranke does not attempt: a DAG of storage chunks, and a network to move them.</span></li>
+			<li><b>Where Ranke goes further</b> <span>The <a href="/papers.html#foundation">foundation paper</a> draws the line at what the links carry. In a Ranke-Graph the Merkle links are the provenance edges, so each id commits to the full closure of claims a record was built from, and content addressing and provenance coincide rather than sit in separate layers.</span></li>
+			<li><b>Together</b> <span>The Universe is a content-addressed key/value store, so a content-addressed network is one shape it can take.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://ipfs.tech/">ipfs.tech</a></p>
+	</details>
+</section>
+
+<section>
+	<h2>Transparency logs and signed statements</h2>
+
+	<details class="nb">
+		<summary>
+		<img class="nb-logo" src="/assets/logos/sigstore.png" alt="" width="96" height="96">
+		<span class="nb-name">Sigstore</span>
+		<span class="nb-gist">Keyless signing for artefacts, recorded in a public append-only log</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>Sigstore signs software artefacts with short-lived certificates bound to an OIDC identity and records the signature in Rekor, a public append-only transparency log anyone can query. Cosign verifies without a key server of your own.</span></li>
+			<li><b>Where it goes further</b> <span>Running public infrastructure with wide adoption and mature tooling.</span></li>
+			<li><b>Where Ranke goes further</b> <span>A Sigstore signature is a detached attestation about content. Ranke folds the signature into the record its address names, so a claim's identity commits to its author as well as to its bytes.</span></li>
+			<li><b>Together</b> <span>Ranke anchors into logs of this kind for time rather than replacing them.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://www.sigstore.dev/">sigstore.dev</a></p>
+	</details>
+
+	<details class="nb">
+		<summary>
+		<img class="nb-logo" src="/assets/logos/c2pa.png" alt="" width="96" height="96">
+		<span class="nb-name">C2PA</span>
+		<span class="nb-gist">Content credentials: a signed manifest of how media was captured and edited</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>C2PA specifies content credentials for media: a manifest recording how an image or a video was captured and edited, signed and bound to the file itself.</span></li>
+			<li><b>Where it goes further</b> <span>A signed standard with camera and tool vendors behind it, addressing provenance where it is hardest, in media that is copied and re-encoded.</span></li>
+			<li><b>Where Ranke goes further</b> <span>A C2PA manifest travels with one asset. A Ranke claim sits in a graph with everything else that asset relates to, and later claims can cite, qualify or contradict it.</span></li>
+			<li><b>Together</b> <span>The <a href="/papers.html#foundation">foundation paper</a> proposes COSE_Sign1 for a claim's envelope, which is what a C2PA claim signature already is. A manifest is a source that arrives with its provenance intact.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://c2pa.org/">c2pa.org</a></p>
+	</details>
+
+	<details class="nb">
+		<summary>
+		<span class="nb-logo"></span>
+		<span class="nb-name">SCITT and Certificate Transparency</span>
+		<span class="nb-gist">Public append-only logs of signed statements, with inclusion proofs</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>Certificate Transparency puts every issued certificate into a public append-only log, so misissuance is discoverable by anyone watching. IETF SCITT generalises the pattern to signed statements about any supply-chain artefact, registered in a transparency service.</span></li>
+			<li><b>Where it goes further</b> <span>The discipline of a public log: independent monitors, inclusion proofs, and in Certificate Transparency's case a decade of operation at internet scale.</span></li>
+			<li><b>Where Ranke goes further</b> <span>A transparency log orders statements and proves inclusion. It does not say what a statement was derived from, where in a Ranke-Graph the citation is a condition of writing at all.</span></li>
+			<li><b>Together</b> <span>An anchor in such a log fixes a whole closure in time, which is what the <a href="/papers.html#foundation">foundation paper</a>'s anchoring rests on.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://datatracker.ietf.org/wg/scitt/about/">datatracker.ietf.org</a></p>
+	</details>
+</section>
+
+<section>
+	<h2>Assertions with provenance</h2>
+
+	<details class="nb">
+		<summary>
+		<img class="nb-logo" src="/assets/logos/nanopub.png" alt="" width="96" height="96">
+		<span class="nb-name">Nanopublications and Trusty URIs</span>
+		<span class="nb-gist">Small immutable scholarly assertions, named by a hash of their content</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>A nanopublication is a small immutable scholarly assertion published with its own provenance and attribution, identified by a Trusty URI: a name containing a hash of the content, so the name verifies what it names.</span></li>
+			<li><b>Where it goes further</b> <span>A working publishing practice in the sciences, with a network, conventions and a community that uses it.</span></li>
+			<li><b>Where Ranke goes further</b> <span>They are a flat collection of independent assertions: no derivation DAG connecting them through chains of processing, and no semantic graph layer.</span></li>
+			<li><b>Together</b> <span>A nanopublication is already a claim with provenance, so ingesting one would lose nothing.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://nanopub.net/">nanopub.net</a></p>
+	</details>
+</section>
+
+<section>
+	<h2>Corrections</h2>
+	<p>These descriptions are written from each project's own documentation and they will date. If
+	one of them misstates what your system does,
+	<a href="https://github.com/rankegraph/ranke-website/issues">say so</a> and it gets fixed. The
+	logos belong to their projects and are used to identify them.</p>
+</section>
