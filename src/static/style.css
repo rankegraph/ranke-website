@@ -544,3 +544,14 @@ footer {
 @media (max-width: 44rem) {
 	.nb > .props, .nb-visit { padding-left: 0; margin-left: 0; }
 }
+
+/* Arriving from a link elsewhere marks the row, so the reader sees which
+   entry they came for even where the browser leaves it shut. */
+.nb:target { background: var(--surface); }
+
+/* ── the logo index ─────────────────────────────────────────────────── */
+
+.logogrid { display: flex; flex-wrap: wrap; gap: 1.1rem 1.5rem; align-items: center; }
+.logogrid a { display: block; line-height: 0; opacity: 0.85; }
+.logogrid a:hover { opacity: 1; }
+.logogrid img { width: 2.4rem; height: 2.4rem; object-fit: contain; }
