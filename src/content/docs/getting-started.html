@@ -1,0 +1,45 @@
+---
+title: "Getting started"
+description: "Run your own RankeDB, bring your data in with adapters, and explore the graph."
+weight: 1
+kind: written
+meta: Start here
+aliases: ["/use.html", "/docs/use/"]
+---
+<section>
+	<h1>Use it</h1>
+	<p class="lead">Run your own RankeDB, point it at storage you already have, and start putting data in. Nothing here needs you to read the papers first.</p>
+</section>
+
+<section>
+	<h2>Install</h2>
+	<p>RankeDB ships as a single binary, built for macOS and Linux on both Intel and ARM. Take the one for your platform from the latest release, write a configuration naming the storage it should use, and run it. One process serves one archive, and that archive is described entirely by the configuration you hand it at launch.</p>
+	<div class="rows">
+		<div>
+			<a href="https://github.com/rankegraph/ranke-db/releases/latest">Download RankeDB</a>
+			<span class="what">Binaries for darwin and linux, amd64 and arm64.</span>
+		</div>
+	</div>
+</section>
+
+<section>
+	<h2>See it running</h2>
+	<p>A live RankeDB is running at <a href="https://archive.rankegraph.org/explorer">archive.rankegraph.org</a> — open it, no install needed. The same explorer ships inside every RankeDB release too, ready to point at an instance of your own: it draws the graph and lets you walk it claim by claim.</p>
+	<div class="rows">
+		<div>
+			<a href="https://archive.rankegraph.org/explorer">Try the demo</a>
+			<span class="what">Ranke-Explorer, against a live archive.</span>
+		</div>
+	</div>
+</section>
+
+<section>
+	<h2>Bring your data in</h2>
+	<p>Data enters through adapters, small clients that talk to the server and map a source into claims. Today that means git: <code>ranke-git</code> imports a repository, whole history or single commit, and restores it byte-identical. Email, GPS traces, browser history and CI build logs are next.</p>
+	<div class="rows">
+		<div>
+			<a href="https://github.com/rankegraph/ranke-tools/releases/latest">ranke-git</a>
+			<span class="what">The git adapter, in ranke-tools.</span>
+		</div>
+	</div>
+</section>

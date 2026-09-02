@@ -1,0 +1,52 @@
+{
+  "framework": {
+    "repo": "rankegraph/ranke-graph",
+    "tag": "v0.23.1",
+    "asset": "ranke-docs.tar.gz"
+  },
+  "packages": [
+    {
+      "namespace": "preview",
+      "name": "glossarium",
+      "version": "0.5.10"
+    }
+  ],
+  "parts": [
+    {
+      "name": "rankedb",
+      "weight": 10,
+      "title": "RankeDB",
+      "blurb": "The archive server: one instance serves one archive from one configuration file, over REST.",
+      "repo": "rankegraph/ranke-db",
+      "tag": "v1.19.0",
+      "asset": "ranke-db-docs.tar.gz"
+    },
+    {
+      "name": "rankego",
+      "weight": 20,
+      "title": "Ranke-Go",
+      "blurb": "The reference implementation: claims, closures and the query language, as a Go library.",
+      "repo": "rankegraph/ranke-go",
+      "tag": null,
+      "asset": "ranke-go-docs.tar.gz"
+    },
+    {
+      "name": "rankets",
+      "weight": 30,
+      "title": "Ranke-TS",
+      "blurb": "The TypeScript client, for browsers and for worker agents.",
+      "repo": "rankegraph/ranke-ts",
+      "tag": null,
+      "asset": "ranke-ts-docs.tar.gz"
+    },
+    {
+      "name": "ranketools",
+      "weight": 40,
+      "title": "Ranke-Tools",
+      "blurb": "Command-line tools over an archive, ranke-git among them.",
+      "repo": "rankegraph/ranke-tools",
+      "tag": null,
+      "asset": "ranke-tools-docs.tar.gz"
+    }
+  ]
+}

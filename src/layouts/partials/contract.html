@@ -1,0 +1,45 @@
+{{/* The part's REST contract, summarised from the file its own bundle carries —
+     so the site holds no second copy of it, and the file itself is published
+     beside the page for a client generator to read.
+
+     A full reference in the site's own idiom would be a maintenance surface
+     nobody asked for, and the redocly rendering a part already generates arrives
+     in redocly's styling. This is the middle path: every endpoint, and the
+     contract linked. */}}
+{{ $contract := . | transform.Unmarshal }}
+{{ $methods := slice "get" "post" "put" "patch" "delete" }}
+
+{{ $operations := slice }}
+{{ range $path, $item := $contract.paths }}
+	{{ range $method, $operation := $item }}
+		{{ if in $methods $method }}
+			{{ $operations = $operations | append (dict
+				"path" $path
+				"method" $method
+				"summary" (or $operation.summary "")
+				"tag" (or (index (or $operation.tags slice) 0) "Other")) }}
+		{{ end }}
+	{{ end }}
+{{ end }}
+
+{{ $tags := slice }}
+{{ range $operations }}{{ if not (in $tags .tag) }}{{ $tags = $tags | append .tag }}{{ end }}{{ end }}
+
+<h2 id="the-rest-contract"><span class="num">API</span> The REST contract</h2>
+<p>Every endpoint the server serves, and what each one is for. The contract is
+generated in the part's own repository and ships with its manual.</p>
+<p><a href="{{ .RelPermalink }}">Download the contract</a> — OpenAPI
+{{ $contract.openapi }}, {{ $contract.info.title }} {{ $contract.info.version }},
+and the file to point a client generator at.</p>
+
+{{ range $tag := $tags }}
+<h3 id="rest-{{ $tag | urlize }}">{{ $tag }}</h3>
+<table>
+	<thead><tr><th>Method</th><th>Path</th><th>What it does</th></tr></thead>
+	<tbody>
+	{{ range where $operations "tag" $tag }}
+		<tr><td><code>{{ upper .method }}</code></td><td><code>{{ .path }}</code></td><td>{{ .summary }}</td></tr>
+	{{ end }}
+	</tbody>
+</table>
+{{ end }}

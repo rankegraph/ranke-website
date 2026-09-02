@@ -1,3 +1,5 @@
 github:
     issues: true
+
+# The command every submit runs, in a fresh checkout of the commit.
 verify: make check

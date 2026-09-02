@@ -1,0 +1,71 @@
+---
+title: "Developers"
+description: "Write a tool, an adapter, or another implementation: the specification, the libraries, the query schema, and the conformance vectors."
+weight: 60
+kind: written
+meta: Building on it
+aliases: ["/build.html"]
+---
+<section>
+	<h1>Build on it</h1>
+	<p class="lead">For writing a tool against a running server, an adapter that brings a new kind of data in, or another implementation of the data type itself.</p>
+</section>
+
+<section>
+	<h2>Libraries</h2>
+	<div class="rows">
+		<div>
+			<a href="https://github.com/rankegraph/ranke-go">ranke-go</a>
+			<span class="what">The reference implementation, in Go.</span>
+		</div>
+		<div>
+			<a href="https://github.com/rankegraph/ranke-ts">ranke-ts</a>
+			<span class="what">The TypeScript translation of it, for the browser and for Node.</span>
+		</div>
+	</div>
+
+	<h2>The server and its clients</h2>
+	<div class="rows">
+		<div>
+			<a href="https://github.com/rankegraph/ranke-db">ranke-db</a>
+			<span class="what">The server that serves a Ranke-Graph, with the Ranke-Explorer frontend. Not an app in itself: a platform to build apps on.</span>
+		</div>
+		<div>
+			<a href="https://github.com/rankegraph/ranke-tools">ranke-tools</a>
+			<span class="what">Clients that operate on a graph by talking to the server, and the first use cases built that way. Worth reading before writing your own.</span>
+		</div>
+	</div>
+</section>
+
+<section>
+	<h2>What an implementation follows</h2>
+	<div class="rows">
+		<div>
+			<a href="https://github.com/rankegraph/ranke-graph/releases/latest/download/ranke-spec.pdf">Normative specification</a>
+			<span class="what">The rules an implementation follows, each with a stable id, so a conformance case and a code comment can cite the same handle.</span>
+		</div>
+		<div>
+			<a href="https://github.com/rankegraph/ranke-graph/releases/latest/download/rql.schema.json">RQL query schema</a>
+			<span class="what">The machine-readable form of the query language.</span>
+		</div>
+		<div>
+			<a href="https://github.com/rankegraph/ranke-graph/releases/latest/download/ranke-testdata.tar.gz">Conformance vectors</a>
+			<span class="what">Claim serializations paired with the ids they are offered under, so an implementation can decide its own conformance.</span>
+		</div>
+		<div>
+			<a href="https://github.com/rankegraph/ranke-graph/blob/main/CHANGELOG.md">Changelog</a>
+			<span class="what">What each release changed in the rules, the papers, the vocabulary, and the vectors.</span>
+		</div>
+	</div>
+</section>
+
+<section>
+	<h2>Writing an adapter</h2>
+	<p>An adapter is an ordinary client: it talks to RankeDB over REST or MCP, and its work is deciding how a source becomes claims — what is a node, what is an edge, and what each claim cites. <code>ranke-git</code> is the worked example, and it is small enough to read in a sitting.</p>
+	<div class="rows">
+		<div>
+			<a href="https://github.com/rankegraph/ranke-tools">ranke-tools</a>
+			<span class="what">The adapters that exist, and the shape yours can take.</span>
+		</div>
+	</div>
+</section>

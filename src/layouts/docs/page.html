@@ -1,0 +1,7 @@
+{{ define "main" }}
+{{ $inner := .Content }}
+{{ with .Resources.GetMatch "openapi.gen.yaml" }}
+	{{ $inner = print $inner (partial "contract.html" .) }}
+{{ end }}
+{{ partial "docsframe.html" (dict "page" . "inner" ($inner | safeHTML)) }}
+{{ end }}
