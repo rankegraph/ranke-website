@@ -8,6 +8,10 @@
 dist/
 .cache/
 
+# Fetched from ranke-graph, never vendored, so this repository cannot drift from
+# the shared release cycle.
+bin/
+
 # Placed into every typst root before a compile, and never committed there.
 # G-SUPPLIED keeps a documentation tree free of any one rendering, which is the
 # point of a format with two backends: a chapter names `vocabulary.typ` and

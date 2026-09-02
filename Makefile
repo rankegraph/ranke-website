@@ -26,8 +26,18 @@ SCRIPTS := src/scripts
 CHECK   := python3 $(SCRIPTS)/check-site.py
 HUGO     = $$($(SCRIPTS)/get-tool.sh hugo)
 
+# The release cycle is ranke-graph's, fetched rather than copied. The git
+# mechanics of a release — branch resolution, the merge-then-tag dance, the wait
+# for CI — are written once there and serve every consumer, so a fix reaches this
+# repository by being fetched. bin/ is gitignored: the script is infrastructure,
+# never vendored, so this repository cannot drift from the shared one.
+RANKE_GRAPH_REF    ?= main
+RELEASE_CYCLER     := bin/release-cycle.sh
+RELEASE_CYCLER_URL ?= https://raw.githubusercontent.com/rankegraph/ranke-graph/$(RANKE_GRAPH_REF)/scripts/release-cycle.sh
+
 .PHONY: help all verify check pages links classes lint links-external docs-check tools \
         site dev docs upgrade place clean \
+        check-clean-tree check-release-bump \
         release major minor patch breaking feature fix
 
 ##@ Checks
@@ -99,12 +109,35 @@ clean: ## Remove everything a build produced, keeping the fetched tools
 
 ##@ Release
 
-release: check ## make release <major|minor|patch> — check, merge to the default branch, tag, push
-	@$(SCRIPTS)/release.sh $(filter major minor patch breaking feature fix,$(MAKECMDGOALS))
+# check-clean-tree and check-release-bump run ahead of check, because both are
+# free and instant and check is a whole build. A dirty tree or a missing bump
+# word should not cost one first. release-cycle.sh validates the bump word too,
+# but only once check has already run.
+check-clean-tree:
+	@[ -z "$$(git status --porcelain)" ] || { echo "working tree is dirty — commit or stash before releasing" >&2; exit 1; }
+
+check-release-bump:
+	@[ -n "$(filter major minor patch breaking feature fix,$(MAKECMDGOALS))" ] || \
+		{ echo "usage: make release <major|breaking | minor|feature | patch|fix>" >&2; exit 1; }
+
+# Nothing here differs from another consumer: no scripts/release-next-version.sh,
+# no scripts/release-pretag.sh, no scripts/release-feature-branch-only. So this
+# repository's release is exactly the shared cycle. A changelog is the one thing
+# a sibling stamps and this does not — the site publishes no artifact a reader
+# depends on, so the git log is the record.
+release: check-clean-tree check-release-bump check $(RELEASE_CYCLER) ## make release <major|minor|patch> — check, merge to the default branch, tag, push
+	@$(RELEASE_CYCLER) $(filter major minor patch breaking feature fix,$(MAKECMDGOALS))
 
 # Absorb the positional bump word so it is not read as a missing target.
 major minor patch breaking feature fix:
 	@:
+
+# A file target with no prerequisite, so a cached copy is never re-fetched on its
+# own. Deleting bin/ is what asks for a fresh one.
+$(RELEASE_CYCLER): ## Cache release-cycle.sh from ranke-graph (bin/ is gitignored — infra, never vendored)
+	@mkdir -p $(dir $(RELEASE_CYCLER))
+	@curl -fsSL $(RELEASE_CYCLER_URL) -o $(RELEASE_CYCLER)
+	@chmod +x $(RELEASE_CYCLER)
 
 ##@ Help
 
