@@ -23,8 +23,15 @@ jobs:
       # site.tar.gz carries index.html as a top-level member, so the host
       # unpacks it straight into its docroot. `make site-bundle` refuses an
       # archive that does not.
+      #
+      # SITE_VERSION reaches the footer, so a page states the release it belongs
+      # to. It is passed rather than derived: the checkout is one commit deep and
+      # fetches no tags, so `git describe` inside the Makefile would fall back to
+      # a bare hash on the very build that has a real version to state.
       - name: Pack the site
-        run: make site-bundle
+        env:
+          TAG: ${{ github.ref_name }}
+        run: make site-bundle SITE_VERSION="$TAG"
 
       # site.tar.gz and site.tar.gz.sha256, the pair the host fetches from
       # /releases/latest/download/.
