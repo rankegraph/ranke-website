@@ -1,0 +1,40 @@
+---
+title: "Demo"
+description: "A Ranke archive documenting this project's own releases: every repository snapshotted at the version it shipped, with the logs of the build that produced it."
+url: /demo.html
+---
+<section>
+	<h1>An archive that documents this project</h1>
+	<p class="lead">The demo is a real Ranke archive, and what it records is Ranke-Graph itself. Every release of every repository in the project enters it as a snapshot of the source, together with the logs of the build that produced it.</p>
+	<aside class="note">
+		<span class="admon-label">Under construction</span>
+		<div class="admon-body">
+			<p>This archive is being populated now. The ingestion that writes each release into it is still being built, so the sections below describe what the demo holds once that runs. The explorer is open in the meantime, and the archive fills as releases are cut.</p>
+		</div>
+	</aside>
+</section>
+
+<section>
+	<h2>What the archive records</h2>
+	<p>Each repository is an entity in the graph, and each of its releases is another. Cutting a release snapshots the repository at the commit that was tagged, and that snapshot attaches to the version it belongs to. The build attaches its logs to the same version.</p>
+	<p>A version therefore carries both halves of its own history: the source it was built from, and the record of the build that turned that source into a release. The archive grows by one version per release, and an earlier version keeps its snapshot and its logs as they were first recorded.</p>
+</section>
+
+<section>
+	<h2>Release documentation</h2>
+	<p>This is one use case for a Ranke archive, and among the smallest. The evidence behind a released version is usually scattered: the tag sits in git, the artefact on a release page, and the logs in a build server that discards them after 90 days. Each lives under a different retention policy, and what connects them is convention.</p>
+	<p>Collecting them onto one entity changes what you can ask. Which commit did this version build from, and what did its tests say on the day it shipped? The answer names the record it rests on, and the bytes are there to check it against.</p>
+</section>
+
+<section>
+	<h2>Walk it in the explorer</h2>
+	<p>Ranke-Explorer is the frontend RankeDB serves: it draws the graph and lets you move through it. Pick an entity, follow its edges to the claims that cite it, and open a claim to read the content recorded under it.</p>
+	<p>Visitors read the archive without an account, and read-only. What you see is this project's own archive rather than a fixture, so it grows every time a release is cut.</p>
+	<div class="paths">
+		<a class="path" href="https://archive.rankegraph.org/explorer">
+			<b>Open the explorer</b>
+			<span>Walk the archive as it stands right now.</span>
+			<em>Ranke-Explorer, read-only</em>
+		</a>
+	</div>
+</section>

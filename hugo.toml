@@ -37,12 +37,16 @@ disableKinds = ["taxonomy", "term", "rss"]
   unsafe = true
 
 # The site's own navigation, in one place. Four entries, in the order the
-# landing page's own paths use: the hosted demo, the documentation, the papers,
-# the builds. The demo leads because it costs a reader nothing to open.
+# landing page's own paths use: the demo, the documentation, the papers, the
+# builds. The demo leads because it costs a reader nothing to open.
 # "Use it" and "Build on it" are documentation and live in that section.
+#
+# Demo points at the page rather than at the explorer itself: the explorer opens
+# on a graph, and a reader who has not been told what the archive holds has no
+# way to read one. The page says what is in there, then hands them the link.
 [[menu.main]]
   name = "Demo"
-  url = "https://archive.rankegraph.org/explorer"
+  url = "/demo.html"
   weight = 5
 [[menu.main]]
   name = "Documentation"
