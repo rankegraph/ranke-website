@@ -20,14 +20,40 @@
 # the site, and .cache/ is what the build needed on the way. Nothing generated
 # is committed.
 #
-# Nothing here deploys. What is produced is dist/.
+# Nothing here deploys. What is produced is dist/, and `site-bundle` packs that
+# into the pair a release publishes; the host fetches it from GitHub and unpacks
+# it itself.
 
 SCRIPTS := src/scripts
 CHECK   := python3 $(SCRIPTS)/check-site.py
 HUGO     = $$($(SCRIPTS)/get-tool.sh hugo)
 
+# brokkr comes from `make tools`, the same install a contributor gets, so a
+# runner and a workstation cannot drift. Where the environment already provides
+# one there is nothing to fetch and nothing that can fail.
+BROKKR_PROVIDED  := $(shell command -v brokkr 2>/dev/null)
+BROKKR           := $(if $(BROKKR_PROVIDED),$(BROKKR_PROVIDED),bin/tools/brokkr)
+BROKKR_INSTALLER := https://raw.githubusercontent.com/flocko-motion/sindri/master/scripts/install-brokkr.sh
+
+# The release cycle is ranke-graph's, fetched rather than copied. The git
+# mechanics of a release — branch resolution, the merge-then-tag dance, the wait
+# for CI — are written once there and serve every consumer, so a fix reaches this
+# repository by being fetched. bin/ is gitignored: the script is infrastructure,
+# never vendored, so this repository cannot drift from the shared one.
+RANKE_GRAPH_REF    ?= main
+RELEASE_CYCLER     := bin/release-cycle.sh
+RELEASE_CYCLER_URL ?= https://raw.githubusercontent.com/rankegraph/ranke-graph/$(RANKE_GRAPH_REF)/scripts/release-cycle.sh
+
+# What a release publishes, and what the host fetches from GitHub. The siblings
+# stage their assets in dist/; here dist/ IS the site, so an asset staged there
+# would end up publishing itself. release/ is that staging area.
+SITE_BUNDLE_NAME := site
+SITE_BUNDLE      := release/$(SITE_BUNDLE_NAME).tar.gz
+SITE_BUNDLE_SUM  := $(SITE_BUNDLE).sha256
+
 .PHONY: help all verify check pages links classes lint links-external docs-check tools \
         site dev docs upgrade place clean \
+        site-bundle check-clean-tree check-release-bump \
         release major minor patch breaking feature fix
 
 ##@ Checks
@@ -53,11 +79,19 @@ classes: site ## Every class a page uses has a rule, and every rule has a user
 docs-check: ## The construct contract, the reference tree, and the tools' own tests
 	@$(SCRIPTS)/check-docs.sh
 
-tools: ## Name anything the build needs that is not installed
+# pipefail is what makes a failed download fail here: without it bash reads an
+# empty script, exits 0, and the missing binary surfaces one target later as a
+# puzzle.
+tools: ## Name what the build needs and does not fetch, and install brokkr
 	@$(SCRIPTS)/check-tools.sh
+ifneq ($(BROKKR_PROVIDED),)
+	@echo "brokkr provided by the environment: $(BROKKR_PROVIDED)"
+else
+	@bash -o pipefail -c 'curl -fsSL $(BROKKR_INSTALLER) | bash -s -- $(BROKKR)'
+endif
 
-lint: ## brokkr's static analysis over whatever this repo holds
-	@brokkr lint
+lint: tools ## brokkr's static analysis over whatever this repo holds
+	@$(BROKKR) lint
 
 # OUT OF `check` ON PURPOSE. These need the network and fail for reasons outside
 # this repository — a rate limit, somebody else's outage, a release asset renamed
@@ -69,7 +103,12 @@ links-external: site ## Check outbound links (needs the network; not part of che
 
 # --cleanDestinationDir, because a page that is renamed otherwise leaves its old
 # URL in dist/ serving what it used to say.
-site: ## Build the whole site into dist/
+#
+# `| place` is order-only: the files place writes are gitignored, so a fresh
+# checkout — a clone, or CI's own — has vendor/ committed and the typst roots
+# empty, and build-docs.sh dies on a missing handbook.typ. Placing first makes a
+# checkout build. It only copies, so running it every time costs nothing.
+site: | place ## Build the whole site into dist/
 	@$(SCRIPTS)/build-docs.sh
 	@$(HUGO) --quiet --cleanDestinationDir
 	@echo ">> dist/ — $$(find dist -type f | wc -l) file(s)"
@@ -94,17 +133,64 @@ place: ## Write the supplied files into every typst root. No network
 	@$(SCRIPTS)/fetch-docs.sh --place
 
 clean: ## Remove everything a build produced, keeping the fetched tools
-	@rm -rf dist .cache/content .cache/typst
-	@echo ">> removed dist/ and the build's intermediates"
+	@rm -rf dist release .cache/content .cache/typst
+	@echo ">> removed dist/, release/ and the build's intermediates"
 
 ##@ Release
 
-release: check ## make release <major|minor|patch> — check, merge to the default branch, tag, push
-	@$(SCRIPTS)/release.sh $(filter major minor patch breaking feature fix,$(MAKECMDGOALS))
+# What a release carries: the built site, whole, at one version, and a checksum
+# beside it so a deploy can verify what it downloaded before it serves it.
+#
+# The site is tarred from INSIDE dist/, so index.html is a top-level member and
+# a deploy unpacks straight into its docroot:
+#
+#   tar -xzf site.tar.gz -C <docroot>
+#
+# Named members rather than `tar -C dist . `, because that spells every entry
+# ./index.html, and the listener that receives this reads the member names and
+# refuses an archive without index.html among them. `ls -A` is what keeps a
+# dotfile in the bundle while leaving . and .. out of it.
+#
+# The sum is written from inside release/, so the name in it carries no path and
+# `sha256sum -c site.tar.gz.sha256` works wherever the two files sit together.
+site-bundle: site ## Pack the built site as release/site.tar.gz, with its .sha256
+	@rm -rf release && mkdir -p release
+	@tar -C dist -czf $(SITE_BUNDLE) $$(ls -A dist)
+	@tar -tzf $(SITE_BUNDLE) | grep -qx 'index.html' || \
+		{ echo "$(SITE_BUNDLE): no index.html at the archive root" >&2; exit 1; }
+	@cd release && sha256sum $(SITE_BUNDLE_NAME).tar.gz > $(SITE_BUNDLE_NAME).tar.gz.sha256
+	@echo ">> wrote $(SITE_BUNDLE) — $$(tar -tzf $(SITE_BUNDLE) | grep -cv '/$$') file(s), index.html at its root"
+	@echo ">> wrote $(SITE_BUNDLE_SUM) — $$(cut -d' ' -f1 $(SITE_BUNDLE_SUM))"
+
+# check-clean-tree and check-release-bump run ahead of check, because both are
+# free and instant and check is a whole build. A dirty tree or a missing bump
+# word should not cost one first. release-cycle.sh validates the bump word too,
+# but only once check has already run.
+check-clean-tree:
+	@[ -z "$$(git status --porcelain)" ] || { echo "working tree is dirty — commit or stash before releasing" >&2; exit 1; }
+
+check-release-bump:
+	@[ -n "$(filter major minor patch breaking feature fix,$(MAKECMDGOALS))" ] || \
+		{ echo "usage: make release <major|breaking | minor|feature | patch|fix>" >&2; exit 1; }
+
+# Nothing here differs from another consumer: no scripts/release-next-version.sh,
+# no scripts/release-pretag.sh, no scripts/release-feature-branch-only. So this
+# repository's release is exactly the shared cycle. A changelog is the one thing
+# a sibling stamps and this does not — the site publishes no artifact a reader
+# depends on, so the git log is the record.
+release: check-clean-tree check-release-bump check $(RELEASE_CYCLER) ## make release <major|minor|patch> — check, merge to the default branch, tag, push
+	@$(RELEASE_CYCLER) $(filter major minor patch breaking feature fix,$(MAKECMDGOALS))
 
 # Absorb the positional bump word so it is not read as a missing target.
 major minor patch breaking feature fix:
 	@:
+
+# A file target with no prerequisite, so a cached copy is never re-fetched on its
+# own. Deleting bin/ is what asks for a fresh one.
+$(RELEASE_CYCLER): ## Cache release-cycle.sh from ranke-graph (bin/ is gitignored — infra, never vendored)
+	@mkdir -p $(dir $(RELEASE_CYCLER))
+	@curl -fsSL $(RELEASE_CYCLER_URL) -o $(RELEASE_CYCLER)
+	@chmod +x $(RELEASE_CYCLER)
 
 ##@ Help
 

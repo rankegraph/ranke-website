@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Nothing to install first: Hugo and typst are pinned in
+      # src/data/tools.json and fetched into .cache/bin by get-tool.sh, and
+      # `make tools` installs brokkr — the same install a contributor gets, so a
+      # runner and a workstation cannot drift.
+      #
+      # `check` builds the site on the way through (-> site), so a merge to main
+      # runs `make site` as part of proving the tree is sound, rather than as a
+      # step of its own that could pass while the gate failed.
+      - name: Gate
+        run: make check
