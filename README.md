@@ -8,7 +8,7 @@ sources each part repository publishes with its releases.
 ```
 make          # the quality gate
 make site     # build the whole site into dist/
-make serve    # build, then serve it and rebuild as you edit
+make dev      # build, then serve it and rebuild as you edit
 make help     # every target, with a line each
 ```
 

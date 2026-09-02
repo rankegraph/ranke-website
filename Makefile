@@ -3,7 +3,7 @@
 # Usage:
 #   make             # the quality gate
 #   make help        # list every target with a one-line description
-#   make serve       # read the site at http://localhost:1313, rebuilding as you edit
+#   make dev         # read the site at http://localhost:1313, rebuilding as you edit
 #   make release     # make release <major|minor|patch>
 #
 # `make help` reads this file: a target followed by `## text` is listed under
@@ -27,7 +27,7 @@ CHECK   := python3 $(SCRIPTS)/check-site.py
 HUGO     = $$($(SCRIPTS)/get-tool.sh hugo)
 
 .PHONY: help all verify check pages links classes lint links-external docs-check tools \
-        site serve docs upgrade place clean \
+        site dev docs upgrade place clean \
         release major minor patch breaking feature fix
 
 ##@ Checks
@@ -74,7 +74,7 @@ site: ## Build the whole site into dist/
 	@$(HUGO) --quiet --cleanDestinationDir
 	@echo ">> dist/ — $$(find dist -type f | wc -l) file(s)"
 
-serve: ## Build, then serve at http://localhost:1313 and rebuild as you edit
+dev: ## Build, then serve at http://localhost:1313 and rebuild as you edit
 	@$(SCRIPTS)/build-docs.sh
 	@$(HUGO) server
 
