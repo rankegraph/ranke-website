@@ -3,7 +3,8 @@
 # so rather than surfacing as an error from whatever reached for it first.
 #
 # typst and hugo are absent from this list on purpose: scripts/get-tool.sh
-# fetches those at the pinned version.
+# fetches those at the pinned version. So is brokkr: `make tools` installs it
+# right after this runs, which is what lets a runner reach the lint gate.
 
 set -uo pipefail
 
@@ -20,10 +21,9 @@ need tar     "any package manager"
 need jq      "https://jqlang.github.io/jq/ — the manifests are JSON and the scripts read them"
 need python3 "https://python.org — scripts/check-site.py checks the built pages"
 need go      "https://go.dev/dl/ — src/tools builds the one adapter between typst and Hugo"
-need brokkr  "the sindri toolbelt — `make lint` runs it"
 
 if [ "$missing" -gt 0 ]; then
 	echo "check-tools: $missing tool(s) missing" >&2
 	exit 1
 fi
-echo "tools ok — curl, tar, jq, python3, go, brokkr"
+echo "tools ok — curl, tar, jq, python3, go"

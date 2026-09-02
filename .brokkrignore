@@ -1,0 +1,5 @@
+# bin/ is ranke-graph's release-cycle.sh, fetched at build time and never
+# vendored. Linting it gates this repository on another one's source: the
+# finding cannot be fixed here, and fixing it there would be undone by the next
+# fetch.
+bin/**

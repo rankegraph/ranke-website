@@ -8,6 +8,10 @@
 dist/
 .cache/
 
+# Where a release stages its two assets: the site packed as one tarball, and
+# the checksum the host verifies it against.
+release/
+
 # Fetched from ranke-graph, never vendored, so this repository cannot drift from
 # the shared release cycle.
 bin/
