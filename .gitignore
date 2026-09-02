@@ -1,0 +1,20 @@
+# sindri hub artifacts (agent worktrees + hub state) — not for the repo
+.worktrees/
+.todos/
+.hugo_build.lock
+
+# What a build produces: dist/ is the site, .cache/ is what it needed on the way
+# — fetched tools, compiled Typst, the content Hugo mounts.
+dist/
+.cache/
+
+# Placed into every typst root before a compile, and never committed there.
+# G-SUPPLIED keeps a documentation tree free of any one rendering, which is the
+# point of a format with two backends: a chapter names `vocabulary.typ` and
+# learns nothing more. Each is a copy of something this repository already holds
+# — src/typst/ is ours, vendor/framework/ is ranke-graph's — so no committed
+# path is ever a shared/, and the placed typst/ copies are only under vendor/.
+**/shared/
+vendor/**/typst/
+**/docs/vocabulary.typ
+**/docs/handbook.typ

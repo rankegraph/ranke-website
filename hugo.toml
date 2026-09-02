@@ -1,0 +1,58 @@
+baseURL = "https://rankegraph.org/"
+locale = "en"
+title = "Ranke-Graph"
+enableRobotsTXT = true
+
+# dist/ is the site, and the only generated directory a listing shows; the
+# intermediates a build needs are in .cache/.
+publishDir = "dist"
+disableKinds = ["taxonomy", "term", "rss"]
+
+# Everything written by hand lives under src/; everything a build produces lands
+# in build/ or public/. Mounts are what let the two stay apart, rather than Hugo's
+# default of expecting its directories at the repository root.
+[[module.mounts]]
+  source = "src/content"
+  target = "content"
+[[module.mounts]]
+  source = ".cache/content"
+  target = "content"
+[[module.mounts]]
+  source = "src/layouts"
+  target = "layouts"
+[[module.mounts]]
+  source = "src/static"
+  target = "static"
+[[module.mounts]]
+  source = "src/data"
+  target = "data"
+
+# Hugo refuses HTML content files by default, because HTML content is emitted
+# unescaped. Here that HTML is what typst compiled from the vendored sources —
+# the same sources the rest of the site is built from.
+[security]
+  allowContent = ['^text/html$']
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+# The site's own navigation, in one place. Four entries, in the order the
+# landing page's own paths use: the hosted demo, the documentation, the papers,
+# the builds. The demo leads because it costs a reader nothing to open.
+# "Use it" and "Build on it" are documentation and live in that section.
+[[menu.main]]
+  name = "Demo"
+  url = "https://archive.rankegraph.org/explorer"
+  weight = 5
+[[menu.main]]
+  name = "Documentation"
+  url = "/docs/"
+  weight = 10
+[[menu.main]]
+  name = "Research"
+  url = "/papers.html"
+  weight = 20
+[[menu.main]]
+  name = "Downloads"
+  url = "/downloads.html"
+  weight = 30

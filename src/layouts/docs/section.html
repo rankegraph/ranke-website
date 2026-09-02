@@ -1,0 +1,28 @@
+{{ define "main" }}
+{{ $cards := "" }}
+{{ range where .Pages "Params.kind" "written" }}
+	{{ $cards = print $cards (partial "card.html" (dict
+		"meta" .Params.meta "href" .RelPermalink "title" .Title "blurb" .Description)) }}
+{{ end }}
+
+{{/* Which release each manual came from is read from the data the import wrote,
+     so this cannot name a version that was never fetched. */}}
+{{ $parts := "" }}
+{{ range sort hugo.Data.parts.parts "weight" }}
+	{{ $part := . }}
+	{{ $imported := index hugo.Data.imported .name }}
+	{{ $meta := "no manual yet" }}
+	{{ $href := "" }}
+	{{ with $imported }}
+		{{ $meta = printf "%s &middot; imported %s" .tag (dateFormat "2 January 2006" .imported) }}
+		{{ $href = printf "/docs/%s/" $part.name }}
+	{{ end }}
+	{{ $parts = print $parts (partial "card.html" (dict
+		"meta" ($meta | safeHTML) "href" $href "title" .title "blurb" .blurb)) }}
+{{ end }}
+
+{{ $inner := print .Content
+	"<h2>Start here</h2>\n<div class=\"cards\">" $cards "</div>"
+	"<h2>The parts</h2>\n<div class=\"cards\">" $parts "</div>" }}
+{{ partial "docsframe.html" (dict "page" . "inner" ($inner | safeHTML)) }}
+{{ end }}

@@ -1,0 +1,68 @@
+---
+title: "Ranke-Graph"
+description: "Everything you keep in one graph, where every answer traces back to the record it rests on. Git repositories today; email, GPS traces and build logs next."
+---
+<section class="hero">
+	<div>
+		<h1>Everything you keep, in one graph.</h1>
+		<p class="lead">Why did we ship with that CVE? Which firmware ran on this device in March? The bytes are in a backup somewhere, and the backup cannot say. Here every answer traces back to its source.</p>
+	</div>
+	<img class="illustration" src="assets/hero.webp" width="900" height="1026" alt="">
+</section>
+
+<section>
+	<h2>What a backup keeps</h2>
+	<p>Your data sits in mailboxes, repositories, photo libraries, chat histories and logs. Applications are discontinued and formats fall out of use, and a backup keeps the bytes without keeping what they meant or where they came from.</p>
+	<p>A Ranke-Graph takes all of it into one graph. Everything enters as a claim — a file, a commit, a message, a photograph — recorded whole, attributed to whoever added it, at a stated time, with edges to whatever it came from. Nothing is overwritten and nothing is deleted, so the archive only ever grows.</p>
+	<p>A language model trained on those documents cannot tell you which document a statement came from, or whether anyone ever wrote it. Here a claim cites what it was built from, and following those citations always ends at an original source. Whatever an agent answers, you can walk back to the record it rests on.</p>
+</section>
+
+<section>
+	<h2>Today it holds git repositories</h2>
+	<div class="cards">
+		<article class="card">
+			<div class="meta">Available now</div>
+			<h3>Snapshot a git repository</h3>
+			<p>Import a repository, the full history or a single commit. Each file becomes a claim of its own, linked to the commit, and the commit to the repository. The snapshot restores byte-identical to the original.</p>
+			<p>Ask when a vulnerable dependency first entered, and the answer names the commit, the author and the moment, with the bytes to check it against.</p>
+			<a href="https://github.com/rankegraph/ranke-tools/releases/latest">ranke-git</a>
+		</article>
+		<article class="card">
+			<div class="meta">Next</div>
+			<h3>Email, GPS traces, browser history, CI build logs</h3>
+			<p>Each of these needs an adapter: a small program that reads a source and turns it into claims. Every adapter widens the set of questions the archive can answer.</p>
+		</article>
+	</div>
+	<p>An agent can extend the graph as readily as read it. Its analysis runs on a branch of its own: it adds claims, cites the records it read, and leaves the sources untouched. Whoever reviews it later can see every record the analysis drew on.</p>
+</section>
+
+<section>
+	<h2>What the structure guarantees</h2>
+	<ul class="props">
+		<li><b>Verifiable</b> <span>Every record can be checked against the bytes it names, by anyone holding it.</span></li>
+		<li><b>Traceable</b> <span>A claim cites its sources before it can exist, and every path ends at an original record.</span></li>
+		<li><b>Simple</b> <span>A storage backend needs three functions, and an adapter is a small client that maps a source into claims.</span></li>
+		<li><b>Storage-agnostic</b> <span>The graph is content, and any store holds it: a filesystem, Postgres, Neo4j, Redis or S3, or a stack of them at once.</span></li>
+	</ul>
+</section>
+
+<section>
+	<h2>Where to go next</h2>
+	<div class="paths">
+		<a class="path" href="https://archive.rankegraph.org/explorer">
+			<b>Try it</b>
+			<span>A live RankeDB — walk a real archive right now.</span>
+			<em>Ranke-Explorer, hosted demo</em>
+		</a>
+		<a class="path" href="/docs/">
+			<b>Documentation</b>
+			<span>Run one, build on it, and read the model underneath.</span>
+			<em>Guides, the manuals, and the shared glossary</em>
+		</a>
+		<a class="path" href="/papers.html">
+			<b>Research</b>
+			<span>The data structure, its guarantees, and where it comes from.</span>
+			<em>Two papers, and the normative specification</em>
+		</a>
+	</div>
+</section>

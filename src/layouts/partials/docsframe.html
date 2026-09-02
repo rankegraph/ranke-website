@@ -1,0 +1,13 @@
+{{/* The frame every page of the section wears. Three regions, three questions:
+     which page (left), the page itself, and where in it (right). A breadcrumb
+     would answer the first a second time, so there is none. */}}
+{{ $page := .page }}
+{{ $toc := or $page.Params.toc ($page.Resources.GetMatch "openapi.gen.yaml") }}
+<div class="docs-layout{{ if $toc }} with-toc{{ end }}">
+{{ partial "docsnav.html" $page }}
+<main class="docs">
+{{ .inner }}
+</main>
+{{ if $toc }}{{ partial "pagetoc.html" $page }}{{ end }}
+</div>
+{{ partial "pager.html" $page }}

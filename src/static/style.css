@@ -1,0 +1,502 @@
+/* Ranke-Graph — landing page.
+   No framework, no build, no JavaScript.
+
+   A modern surface with archival warmth in the accents: the ground is
+   near-white and the hairlines are cool grey, while the amber and teal
+   sampled from the logo appear only where the eye lands. */
+
+:root {
+	/* sampled from the logo */
+	--ink:        #203030;
+	--amber:      #e0a040;
+	--terracotta: #b5462a;
+	--teal:       #2d5c66;
+
+	color-scheme: light;   /* the page is light, not light-by-default */
+
+	--bg:      #ffffff;
+	--surface: #fbfcfc;
+	--text:    #1c2426;
+	--muted:   #5b6a6c;
+	--rule:    #d8dee1;
+	--accent:  #1f5f6b;   /* the logo's teal, deepened to carry links */
+
+	--measure: 34rem;      /* comfortable reading width */
+	--page:    64rem;      /* outer container */
+	--gap:     clamp(2rem, 5vw, 4rem);
+}
+
+/* The page is light for every reader: the logo is drawn for a bright ground,
+   and the palette is built around it. A dark variant would mean a second set
+   of tokens here and a logo that reads on both. */
+
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+	margin: 0;
+	padding: 0 clamp(1rem, 4vw, 2.5rem);
+	background: var(--bg);
+	color: var(--text);
+	font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+	      "Helvetica Neue", Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+}
+
+.page { max-width: var(--page); margin: 0 auto; }
+
+/* ── header ─────────────────────────────────────────────────────────── */
+
+/* The mark and the menu rest on one line, and the header draws it. Centring
+   them instead left the mark floating against a line the menu only implied. */
+header {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: 0.9rem 2rem;
+	padding: var(--gap) 0 0.85rem;
+	border-bottom: 1px solid var(--rule);
+}
+/* The link is the flex item, so the link is what carries the width. An anchor
+   left to size itself around a percentage-width image claims the whole line and
+   pushes the menu onto one of its own.
+
+   The mark then hangs 0.27rem below the line the flex box aligns it to, which
+   puts the wordmark's baseline on the menu's. logo.png is a wordmark with the
+   emblem set around it, and the emblem reaches 26% of the image's height below
+   that baseline; aligning the image's own edge lifts the wordmark by the
+   difference between that band and the descender space under the menu. Retune
+   this if the asset's proportions change. */
+.home { flex: none; width: min(14rem, 48%); margin-bottom: -0.27rem; }
+.wordmark { width: 100%; height: auto; display: block; }
+
+/* Every other hover here moves a colour, a border or a background, and none of
+   those reach a transparent PNG. Opacity is what an image link can answer with,
+   and it costs no layout, so it cannot disturb the baseline above. */
+.home:hover { opacity: 0.7; }
+
+/* One warm line on a cool page: the whole archival note, stated once. It now
+   marks the left end of the line the header rests on, rather than hanging under
+   it as a stub of its own. */
+header::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: -1px;
+	width: 3.5rem;
+	height: 2px;
+	background: var(--amber);
+}
+
+/* The same menu on every page, so a reader is never further than one line from
+   anywhere else on the site. The section they are in carries the warm accent. */
+.site-nav { margin-left: auto; }
+.site-nav ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.3rem 1.4rem;
+}
+.site-nav a {
+	display: block;
+	padding: 0.15rem 0;
+	font-size: 0.95rem;
+	color: var(--muted);
+	text-decoration: none;
+}
+.site-nav a:hover { color: var(--accent); }
+.site-nav a.current { color: var(--text); font-weight: 600; }
+
+@media (max-width: 44rem) {
+	.site-nav { margin-left: 0; width: 100%; }
+}
+
+/* ── typography ─────────────────────────────────────────────────────── */
+
+h1 {
+	font-size: clamp(2rem, 5vw, 3.1rem);
+	line-height: 1.1;
+	letter-spacing: -0.02em;
+	margin: 0 0 0.6em;
+	max-width: 18ch;
+}
+
+h2 {
+	font-size: 1.05rem;
+	letter-spacing: 0.09em;
+	text-transform: uppercase;
+	color: var(--muted);
+	font-weight: 600;
+	margin: 0 0 1.4rem;
+}
+
+h3 { font-size: 1.15rem; margin: 0 0 0.35rem; }
+
+p { max-width: var(--measure); }
+
+.lead { font-size: clamp(1.05rem, 2vw, 1.3rem); color: var(--muted); max-width: 46ch; }
+
+a { color: var(--accent); text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+
+section { padding: var(--gap) 0; border-top: 1px solid var(--rule); }
+section:first-of-type { border-top: 0; }
+
+/* ── hero ───────────────────────────────────────────────────────────── */
+
+.hero { display: grid; gap: var(--gap); align-items: center; }
+
+@media (min-width: 52rem) {
+	.hero { grid-template-columns: 1fr auto; }
+}
+
+/* An illustration, not a wallpaper: it sits beside the words, never over them. */
+.illustration {
+	width: clamp(9rem, 22vw, 15rem);
+	height: auto;
+	justify-self: center;
+}
+
+/* ── the signpost ───────────────────────────────────────────────────── */
+
+.paths { display: grid; gap: 1rem; }
+/* auto-fit rather than a fixed count, so a fifth signpost wraps instead of
+   forcing a redesign. */
+@media (min-width: 52rem) { .paths { grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); } }
+
+.path {
+	display: grid;
+	gap: 0.35rem;
+	align-content: start;
+	padding: 1.3rem 1.4rem;
+	border: 1px solid var(--rule);
+	border-radius: 10px;
+	background: var(--surface);
+	text-decoration: none;
+	color: inherit;
+}
+.path:hover { border-color: var(--accent); }
+.path b { font-size: 1.1rem; color: var(--accent); }
+.path span { color: var(--text); font-size: 0.95rem; }
+.path em { color: var(--muted); font-size: 0.85rem; font-style: normal; }
+
+/* ── subsection heading inside a section ────────────────────────────── */
+
+h3.sub {
+	font-size: 0.95rem;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--muted);
+	margin: 2rem 0 1rem;
+}
+
+/* ── the property list ──────────────────────────────────────────────── */
+
+.props { list-style: none; padding: 0; margin: 0; display: grid; gap: 1.6rem; }
+@media (min-width: 44rem) { .props { grid-template-columns: 1fr 1fr; gap: 2rem 3rem; } }
+
+.props b { display: block; color: var(--text); }
+.props span { color: var(--muted); }
+
+/* ── cards ──────────────────────────────────────────────────────────── */
+
+.cards { display: grid; gap: 1.25rem; }
+@media (min-width: 44rem) { .cards { grid-template-columns: 1fr 1fr; } }
+
+.card {
+	background: var(--surface);
+	border: 1px solid var(--rule);
+	border-radius: 10px;
+	padding: 1.4rem 1.5rem;
+}
+.card p { margin: 0.4rem 0 0.9rem; color: var(--muted); font-size: 0.95rem; }
+.card .meta { font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+
+/* ── plain link lists ───────────────────────────────────────────────── */
+
+.rows { display: grid; gap: 0.9rem; margin: 0; padding: 0; }
+.rows > div { display: grid; gap: 0.15rem; }
+.rows .what { color: var(--muted); font-size: 0.95rem; max-width: var(--measure); }
+
+/* ── footer ─────────────────────────────────────────────────────────── */
+
+footer {
+	border-top: 1px solid var(--rule);
+	padding: 2rem 0 4rem;
+	color: var(--muted);
+	font-size: 0.9rem;
+}
+
+/* ── scaffolding: anything unwritten shouts ─────────────────────────── */
+
+.todo {
+	display: block;
+	border: 1px dashed var(--amber);
+	background: color-mix(in srgb, var(--amber) 12%, transparent);
+	color: var(--text);
+	padding: 0.7rem 0.9rem;
+	border-radius: 6px;
+	font-size: 0.9rem;
+	max-width: var(--measure);
+}
+.todo::before { content: "TO WRITE — "; font-weight: 700; letter-spacing: 0.04em; }
+
+/* ══ the documentation section ═══════════════════════════════════════════
+   One rule per class in typst/vocabulary.typ: the markup is the backend's and
+   the look is here, so an appearance change never becomes a markup change.
+   The bare element rules are scoped to .docs, which the templater wraps the
+   compiled body in, since the landing page sets its own h2 and p. The
+   construct classes need no scope — they appear nowhere else. */
+
+.docs { max-width: var(--page); }
+
+.docs h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); max-width: 26ch; }
+
+/* The backend numbers a heading in an element of its own, so the number reads as
+   a label rather than as part of the title, and a contents list can drop it. */
+.docs .num { color: var(--muted); font-weight: 400; margin-right: 0.4em; }
+
+/* Typst emits a chapter as h2 and a section as h3, numbered by the backend. */
+.docs h2 {
+	font-size: 1.5rem;
+	text-transform: none;
+	letter-spacing: -0.01em;
+	color: var(--text);
+	margin: 2.8rem 0 1rem;
+	padding-top: 1.6rem;
+	border-top: 1px solid var(--rule);
+}
+
+.docs h3 { font-size: 1.15rem; margin: 2rem 0 0.6rem; }
+.docs h4 { font-size: 1rem; margin: 1.5rem 0 0.4rem; color: var(--muted); }
+
+.docs p, .docs ul, .docs ol { max-width: var(--measure); }
+
+/* ── the front matter the root writes ───────────────────────────────── */
+
+.handbook-front { padding-bottom: 1.2rem; border-bottom: 1px solid var(--rule); }
+.handbook-front .subtitle { font-size: 1.1rem; color: var(--muted); max-width: 46ch; }
+
+.edition { display: flex; gap: 0.8rem; align-items: baseline; font-size: 0.85rem; }
+.edition .version {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	background: color-mix(in srgb, var(--teal) 10%, transparent);
+	color: var(--accent);
+	padding: 0.1rem 0.45rem;
+	border-radius: 4px;
+}
+.edition .dated { color: var(--muted); }
+
+/* Where the chapters came from, so a reader who needs newer knows where to go. */
+.provenance { font-size: 0.85rem; color: var(--muted); max-width: 56ch; }
+
+/* ── a divider between groups of chapters ───────────────────────────── */
+
+.part {
+	margin: 3.5rem 0 0;
+	padding-top: 1.2rem;
+	border-top: 2px solid var(--amber);
+	font-size: 0.85rem;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--muted);
+}
+
+/* ── a term set apart from the prose ────────────────────────────────── */
+
+.concept {
+	max-width: var(--measure);
+	margin: 1.6rem 0;
+	padding: 1.1rem 1.3rem;
+	background: var(--surface);
+	border: 1px solid var(--rule);
+	border-left: 3px solid var(--teal);
+	border-radius: 8px;
+}
+.concept-term { display: block; font-weight: 600; margin-bottom: 0.35rem; }
+.concept-body > :first-child { margin-top: 0; }
+.concept-body > :last-child { margin-bottom: 0; }
+
+/* ── the two admonition levels, and deliberately only two ───────────── */
+
+.note, .warning {
+	max-width: var(--measure);
+	margin: 1.5rem 0;
+	padding: 0.9rem 1.2rem;
+	border-left: 3px solid;
+	border-radius: 0 8px 8px 0;
+}
+.note { border-color: var(--teal); background: color-mix(in srgb, var(--teal) 6%, transparent); }
+.warning { border-color: var(--terracotta); background: color-mix(in srgb, var(--terracotta) 8%, transparent); }
+
+.admon-label {
+	display: block;
+	font-size: 0.72rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	margin-bottom: 0.3rem;
+}
+.note .admon-label { color: var(--accent); }
+.warning .admon-label { color: var(--terracotta); }
+.admon-body > :first-child { margin-top: 0; }
+.admon-body > :last-child { margin-bottom: 0; }
+
+/* ── a named thing: a flag, a key, a field ──────────────────────────── */
+
+.item { max-width: var(--measure); margin: 1.2rem 0; padding-left: 1rem; border-left: 2px solid var(--rule); }
+.item .signature {
+	display: inline-block;
+	font-size: 0.9rem;
+	color: var(--text);
+	background: var(--surface);
+	border: 1px solid var(--rule);
+	border-radius: 5px;
+	padding: 0.1rem 0.45rem;
+	margin-bottom: 0.35rem;
+}
+.item-body { color: var(--muted); }
+.item-body > :first-child { margin-top: 0; }
+.item-body > :last-child { margin-bottom: 0; }
+
+/* ── a worked case ──────────────────────────────────────────────────── */
+
+.example {
+	max-width: var(--measure);
+	margin: 1.5rem 0;
+	padding: 1rem 1.2rem;
+	border: 1px dashed var(--rule);
+	border-radius: 8px;
+}
+.example-label {
+	display: block;
+	font-size: 0.72rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--muted);
+	margin-bottom: 0.35rem;
+}
+.example-body > :first-child { margin-top: 0; }
+.example-body > :last-child { margin-bottom: 0; }
+
+/* ── a guarantee the manual states, addressable by its id ───────────── */
+
+.rule {
+	max-width: var(--measure);
+	margin: 1.6rem 0;
+	padding: 1rem 1.2rem;
+	background: var(--surface);
+	border: 1px solid var(--rule);
+	border-radius: 8px;
+	scroll-margin-top: 1.5rem;
+}
+.rule-head { display: flex; gap: 0.6rem; align-items: baseline; margin-bottom: 0.45rem; }
+.rule-id {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	font-weight: 700;
+	font-size: 0.85rem;
+	text-decoration: none;
+}
+.rule-tier { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.rule-body > :first-child { margin-top: 0; }
+.rule-body > :last-child { margin-bottom: 0; }
+.rule:target { border-color: var(--accent); }
+
+/* ── glossary terms and pointers ────────────────────────────────────── */
+
+.gls { text-decoration-style: dotted; text-decoration-thickness: 1px; }
+.dref { color: var(--muted); font-style: italic; }
+.dref::before { content: "→ "; font-style: normal; }
+
+/* ── code, pictures, tables: wide things scroll inside their own box ── */
+
+.docs .listing, .docs pre { max-width: var(--measure); overflow-x: auto; }
+.docs pre {
+	background: var(--surface);
+	border: 1px solid var(--rule);
+	border-radius: 8px;
+	padding: 0.9rem 1.1rem;
+	font-size: 0.88rem;
+	line-height: 1.5;
+}
+.docs code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.92em; }
+.docs pre code { font-size: inherit; }
+
+.docs figure { max-width: var(--measure); margin: 1.8rem 0; }
+.docs figure img { max-width: 100%; height: auto; display: block; }
+.docs figcaption { font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem; }
+
+.docs table { display: block; overflow-x: auto; border-collapse: collapse; font-size: 0.92rem; }
+.docs th, .docs td { border: 1px solid var(--rule); padding: 0.4rem 0.7rem; text-align: left; }
+
+/* ── the docs section's furniture ────────────────────────────────────── */
+
+/* Three regions, three questions: which page, the page, and where in it. There
+   is no breadcrumb: with the site menu naming the section and the left rail
+   naming the page, it would answer both a second time.
+
+   On one column the rails follow the article — a manual's contents run to
+   thirty entries, and a reader who came to read should not scroll past them. */
+.docs-layout { display: grid; gap: var(--gap); padding: var(--gap) 0 0; }
+.docs-nav, .page-toc { order: 2; }
+
+@media (min-width: 60rem) {
+	.docs-layout { grid-template-columns: 12rem minmax(0, 1fr); gap: 3rem; }
+	.docs-layout.with-toc { grid-template-columns: 12rem minmax(0, 1fr) 12rem; }
+	.docs-nav, .page-toc { order: 0; position: sticky; top: 1.5rem; align-self: start; }
+}
+
+.rail-title {
+	font-size: 0.72rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--muted);
+	margin: 0 0 0.6rem;
+}
+
+.docs-nav ul, .page-toc ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.15rem; }
+.docs-nav a, .page-toc a {
+	display: block;
+	padding: 0.3rem 0.6rem;
+	text-decoration: none;
+	font-size: 0.95rem;
+}
+.docs-nav a { border-left: 2px solid var(--rule); }
+.docs-nav a:hover, .page-toc a:hover { background: var(--surface); }
+.docs-nav a.current { border-left-color: var(--amber); color: var(--text); font-weight: 600; }
+
+/* The rail is a list of places in one page, so it reads quieter than the list
+   of pages beside it, and nests one level. */
+.page-toc a { font-size: 0.85rem; color: var(--muted); }
+.page-toc .level-2 a { padding-left: 0.6rem; }
+.page-toc .level-3 a { padding-left: 1.6rem; }
+
+
+/* Previous and next, so the section reads as a book rather than a set of pages. */
+.pager {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-top: var(--gap);
+	padding-top: 1.2rem;
+	border-top: 1px solid var(--rule);
+	font-size: 0.95rem;
+}
+.pager .prev::before { content: "← "; }
+.pager .next { margin-left: auto; text-align: right; }
+.pager .next::after { content: " →"; }
+
+/* ── the glossary ───────────────────────────────────────────────────── */
+
+.glossary { margin: 1.2rem 0 2rem; max-width: var(--measure); }
+.glossary dt { margin-top: 1.4rem; scroll-margin-top: 1.5rem; }
+.glossary dt .term { font-weight: 600; text-decoration: none; }
+.glossary dt .term:hover { text-decoration: underline; }
+.glossary dd { margin: 0.25rem 0 0; color: var(--muted); }

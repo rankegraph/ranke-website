@@ -1,0 +1,13 @@
+{{/* Which page: the section's own pages, and nothing about where the reader is
+     inside one. That is the rail's question, and answering it twice is what
+     made this page carry the same list in two places. */}}
+{{ $section := .Site.GetPage "/docs" }}
+<nav class="docs-nav" aria-label="Documentation">
+	<p class="rail-title">In this section</p>
+	<ul>
+		<li>{{ if eq .RelPermalink "/docs/" }}<a class="current" aria-current="page" href="/docs/">Overview</a>{{ else }}<a href="/docs/">Overview</a>{{ end }}</li>
+	{{ range $section.Pages.ByWeight }}
+		<li>{{ if eq .RelPermalink $.RelPermalink }}<a class="current" aria-current="page" href="{{ .RelPermalink }}">{{ .Title }}</a>{{ else }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}</li>
+	{{ end }}
+	</ul>
+</nav>

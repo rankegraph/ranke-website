@@ -1,0 +1,14 @@
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} — {{ .Site.Title }}{{ end }}</title>
+<meta name="description" content="{{ .Description }}">
+<link rel="icon" href="/assets/favicon-32.png" sizes="32x32">
+<link rel="icon" href="/assets/favicon-16.png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="canonical" href="{{ .Permalink }}">
+<link rel="stylesheet" href="/style.css">
+{{/* Typst writes its own rules for the MathML it emits; without them every
+     formula renders unstyled. */}}
+{{ with .Params.styles }}<style>{{ . | safeCSS }}</style>{{ end }}
+</head>

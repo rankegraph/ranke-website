@@ -1,0 +1,5 @@
+{
+  "typst": "0.15.0",
+  "hugo": "0.165.0",
+  "typst-must-match": "rankegraph/ranke-db:Makefile:TYPST_VERSION"
+}

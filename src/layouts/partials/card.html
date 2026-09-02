@@ -1,0 +1,8 @@
+{{/* One card, so the section's own pages and the imported manuals cannot come to
+     look like two different things. A card with no href is something the site
+     knows about and cannot link to yet. */}}
+<article class="card">
+	<div class="meta">{{ .meta }}</div>
+	{{ if .href }}<h3><a href="{{ .href }}">{{ .title }}</a></h3>{{ else }}<h3>{{ .title }}</h3>{{ end }}
+	<p>{{ .blurb }}</p>
+</article>

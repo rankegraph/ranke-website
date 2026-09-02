@@ -1,0 +1,18 @@
+{{/* One header, the same on every page: the mark home, and the site's own menu
+     with the section the reader is in marked. Anything that differed between
+     the landing page and the rest moved the mark and the menu under a reader
+     as they navigated. */}}
+<header>
+	{{/* The mark is the whole of this link, so its alt names the destination
+	     rather than the picture: that text is the link's accessible name. */}}
+	<a class="home" href="/"><img class="wordmark" src="/assets/logo.png" alt="Ranke-Graph home"></a>
+	<nav class="site-nav" aria-label="Site">
+		<ul>
+		{{ $here := .RelPermalink }}
+		{{ range .Site.Menus.main }}
+			{{ $current := or (eq $here .URL) (and (ne .URL "/") (hasPrefix $here .URL)) }}
+			<li><a{{ if $current }} class="current" aria-current="page"{{ end }} href="{{ .URL }}">{{ .Name }}</a></li>
+		{{ end }}
+		</ul>
+	</nav>
+</header>

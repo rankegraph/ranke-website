@@ -1,0 +1,10 @@
+{{/* Where in this page. The headings are the ones the typst backend named, so
+     every entry is an anchor that says what it points at. */}}
+<nav class="page-toc" aria-label="On this page">
+	<p class="rail-title">On this page</p>
+	<ul>
+	{{ range .Params.toc }}<li class="level-{{ .level }}"><a href="#{{ .id }}">{{ .text }}</a></li>
+	{{ end }}
+	{{ if .Resources.GetMatch "openapi.gen.yaml" }}<li class="level-2"><a href="#the-rest-contract">The REST contract</a></li>{{ end }}
+	</ul>
+</nav>
