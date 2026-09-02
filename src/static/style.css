@@ -73,6 +73,11 @@ header {
 .home { flex: none; width: min(14rem, 48%); margin-bottom: -0.27rem; }
 .wordmark { width: 100%; height: auto; display: block; }
 
+/* Every other hover here moves a colour, a border or a background, and none of
+   those reach a transparent PNG. Opacity is what an image link can answer with,
+   and it costs no layout, so it cannot disturb the baseline above. */
+.home:hover { opacity: 0.7; }
+
 /* One warm line on a cool page: the whole archival note, stated once. It now
    marks the left end of the line the header rests on, rather than hanging under
    it as a stub of its own. */

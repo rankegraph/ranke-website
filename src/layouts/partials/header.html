@@ -3,7 +3,9 @@
      the landing page and the rest moved the mark and the menu under a reader
      as they navigated. */}}
 <header>
-	<a class="home" href="/"><img class="wordmark" src="/assets/logo.png" alt="Ranke-Graph"></a>
+	{{/* The mark is the whole of this link, so its alt names the destination
+	     rather than the picture: that text is the link's accessible name. */}}
+	<a class="home" href="/"><img class="wordmark" src="/assets/logo.png" alt="Ranke-Graph home"></a>
 	<nav class="site-nav" aria-label="Site">
 		<ul>
 		{{ $here := .RelPermalink }}
