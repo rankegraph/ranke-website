@@ -51,12 +51,12 @@ disableKinds = ["taxonomy", "term", "rss"]
 [[menu.main]]
   name = "Documentation"
   url = "/docs/"
-  weight = 10
+  weight = 20
 [[menu.main]]
   name = "Research"
   url = "/papers.html"
-  weight = 20
+  weight = 30
 [[menu.main]]
   name = "Downloads"
   url = "/downloads.html"
-  weight = 30
+  weight = 10

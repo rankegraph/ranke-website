@@ -157,7 +157,7 @@ section:first-of-type { border-top: 0; }
 
 /* An illustration, not a wallpaper: it sits beside the words, never over them. */
 .illustration {
-	width: clamp(9rem, 22vw, 15rem);
+	width: clamp(10.8rem, 26.4vw, 18rem);
 	height: auto;
 	justify-self: center;
 }
