@@ -44,6 +44,15 @@ RANKE_GRAPH_REF    ?= main
 RELEASE_CYCLER     := bin/release-cycle.sh
 RELEASE_CYCLER_URL ?= https://raw.githubusercontent.com/rankegraph/ranke-graph/$(RANKE_GRAPH_REF)/scripts/release-cycle.sh
 
+# What the built site says it was built from. A release passes the tag it is
+# cutting (SITE_VERSION=v1.2.3); every other build derives one from git, so a
+# page states the commit behind it rather than claiming a release.
+#
+# --always because a checkout with no tags still has to yield something: CI
+# clones one commit deep and fetches none, so `git describe` has nothing to
+# describe against and falls back to the abbreviated hash.
+SITE_VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo unknown)
+
 # What a release publishes, and what the host fetches from GitHub. The siblings
 # stage their assets in dist/; here dist/ IS the site, so an asset staged there
 # would end up publishing itself. release/ is that staging area.
@@ -110,12 +119,12 @@ links-external: site ## Check outbound links (needs the network; not part of che
 # checkout build. It only copies, so running it every time costs nothing.
 site: | place ## Build the whole site into dist/
 	@$(SCRIPTS)/build-docs.sh
-	@$(HUGO) --quiet --cleanDestinationDir
-	@echo ">> dist/ — $$(find dist -type f | wc -l) file(s)"
+	@HUGO_PARAMS_VERSION='$(SITE_VERSION)' $(HUGO) --quiet --cleanDestinationDir
+	@echo ">> dist/ — $$(find dist -type f | wc -l) file(s), built from $(SITE_VERSION)"
 
 dev: ## Build, then serve at http://localhost:1313 and rebuild as you edit
 	@$(SCRIPTS)/build-docs.sh
-	@$(HUGO) server
+	@HUGO_PARAMS_VERSION='$(SITE_VERSION)' $(HUGO) server
 
 ##@ Documentation
 
