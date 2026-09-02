@@ -4,21 +4,69 @@ description: "Everything you keep in one graph, where every answer traces back t
 ---
 <section class="hero">
 	<div>
-		<h1>Everything you keep, in one graph.</h1>
-		<p class="lead">Why did we ship with that CVE? Which firmware ran on this device in March? The bytes are in a backup somewhere, and the backup cannot say. Here every answer traces back to its source.</p>
+		<h1>Every release, with its evidence, kept.</h1>
+		<p class="lead">
+A year later someone asks why you shipped with that CVE. The build logs have expired, the ticket is gone, the branch was squashed. Ranke keeps the whole record — the snapshot, the scan, the decision that was taken — and every answer points back at the document it came from.
+  </p>
 	</div>
 	<img class="illustration" src="assets/hero.webp" width="900" height="1026" alt="">
 </section>
 
 <section>
-	<h2>What a backup keeps</h2>
-	<p>Your data sits in mailboxes, repositories, photo libraries, chat histories and logs. Applications are discontinued and formats fall out of use, and a backup keeps the bytes without keeping what they meant or where they came from.</p>
-	<p>A Ranke-Graph takes all of it into one graph. Everything enters as a claim — a file, a commit, a message, a photograph — recorded whole, attributed to whoever added it, at a stated time, with edges to whatever it came from. Nothing is overwritten and nothing is deleted, so the archive only ever grows.</p>
-	<p>A language model trained on those documents cannot tell you which document a statement came from, or whether anyone ever wrote it. Here a claim cites what it was built from, and following those citations always ends at an original source. Whatever an agent answers, you can walk back to the record it rests on.</p>
+	<h2>What an archive keeps</h2>
+	<p>
+    An archive is a collection of records: letters, photographs, minutes, recordings.
+    Each one was taken in, and the taking-in was itself recorded.
+  </p>
+  <p>
+So every record carries two dates: when it entered the archive and its presumed date of origin. 
+    It carries who put it there. It carries what it is. None of this describes the world the record speaks about; it describes the record, and that is what makes the record usable as evidence rather than as information.
+  </p>
+  <p>
+    Nothing changes after entering the archive. A document that turns out
+    to be wrong keeps its place; a later record says so, and both stay
+   readable. Contradiction is part of what the archive holds, because
+   which account is right is often decided long after both were filed.
+  </p>
+  <p>
+    Every record belongs to a body of material. Cataloguing, summaries and analyses 
+    are filed too, each saying what it drew on.
+    A century of that work leaves a structure, and the structure is what makes anything findable.
+  </p>
+  <p>
+    Archives have done this since the nineteenth century.
+  </p>
+  <p>
+    Digital systems keep history: git every version of a file, an issue tracker every comment,
+    a build system its logs. Each keeps its own, under its own policy: one squashes, one prunes
+    after ninety days, one is append-only, and several cannot be exported at all. The history is
+    scattered, and no system holds what runs across them.
+  </p>
 </section>
 
 <section>
-	<h2>Today it holds git repositories</h2>
+	<h2>What Ranke does with it</h2>
+	<p>
+		Ranke-Graph takes the archival form literally. Everything enters as a claim: a file, a commit,
+		a scan result, a message. A claim holds the bytes as they were, the time it entered, who put it
+		there, and edges to the claims it was built from. Nothing is overwritten or removed, and no
+		claim can be written without saying what it rests on.
+	</p>
+	<p>
+		That constraint is where the order comes from. The structure is the citations themselves, so there
+		is no catalogue to maintain, and following them always ends at something that entered from
+		outside. Whatever an agent or a colleague answers from the archive, the path back to the
+		original record is part of the answer.
+	</p>
+	<p>
+		Ranke-Graph is a format. The graph is the content, and any store that holds
+		bytes under a key can hold it: a filesystem, S3, Postgres, Neo4j, or several at once. RankeDB
+		serves it and decides who may read and write. Without RankeDB the archive is still a set of
+		self-describing files.
+	</p>
+</section>
+<!--
+<section>
 	<div class="cards">
 		<article class="card">
 			<div class="meta">Available now</div>
@@ -35,16 +83,7 @@ description: "Everything you keep in one graph, where every answer traces back t
 	</div>
 	<p>An agent can extend the graph as readily as read it. Its analysis runs on a branch of its own: it adds claims, cites the records it read, and leaves the sources untouched. Whoever reviews it later can see every record the analysis drew on.</p>
 </section>
-
-<section>
-	<h2>What the structure guarantees</h2>
-	<ul class="props">
-		<li><b>Verifiable</b> <span>Every record can be checked against the bytes it names, by anyone holding it.</span></li>
-		<li><b>Traceable</b> <span>A claim cites its sources before it can exist, and every path ends at an original record.</span></li>
-		<li><b>Simple</b> <span>A storage backend needs three functions, and an adapter is a small client that maps a source into claims.</span></li>
-		<li><b>Storage-agnostic</b> <span>The graph is content, and any store holds it: a filesystem, Postgres, Neo4j, Redis or S3, or a stack of them at once.</span></li>
-	</ul>
-</section>
+//-->
 
 <section>
 	<h2>Where to go next</h2>
@@ -52,17 +91,18 @@ description: "Everything you keep in one graph, where every answer traces back t
 		<a class="path" href="/demo.html">
 			<b>Try it</b>
 			<span>An archive documenting this project's own releases.</span>
-			<em>The demo, and the explorer that opens it</em>
+		</a>
+		<a class="path" href="/downloads.html">
+			<b>Downloads</b>
+			<span>RankeDB server with explorer and ingestion clients.</span>
 		</a>
 		<a class="path" href="/docs/">
 			<b>Documentation</b>
-			<span>Run one, build on it, and read the model underneath.</span>
-			<em>Guides, the manuals, and the shared glossary</em>
+			<span>Learn how to use RankeDB and develop extensions.</span>
 		</a>
 		<a class="path" href="/papers.html">
 			<b>Research</b>
-			<span>The data structure, its guarantees, and where it comes from.</span>
-			<em>Two papers, and the normative specification</em>
+			<span>From mathematical foundation to full specification.</span>
 		</a>
 	</div>
 </section>
