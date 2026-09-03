@@ -11,8 +11,13 @@ url: /neighbours.html
 
 <section>
 	<h2>How to read this</h2>
-	<p>Every entry answers the same four questions: what the system is for, where it goes further
-	than Ranke, where Ranke goes further, and how the two compose. Open an entry to read them.</p>
+	<p>Every entry answers the same five questions: what the system is for, where it goes further
+	than Ranke, where Ranke goes further, how the two compose, and the terms it comes on. Open an
+	entry to read them.</p>
+	<p>The terms say three things: whether you run the system yourself or reach it as a service,
+	whether the source is open, and what it costs. They are the answer each project published when
+	this page was last revised, and licences move faster than the rest of a description, so the
+	note at the foot applies to them first.</p>
 	<p>The fourth answer describes a composition that is possible rather than built.
 	<code>ranke-git</code> is the only adapter that exists today, so everything else under
 	<i>Together</i> is a design sketch, and the entries say so where it matters.</p>
@@ -32,6 +37,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>Branching, merging, diffing, blame, rebase. Everything you do to code while you are writing it, which Ranke leaves alone.</span></li>
 			<li><b>Where Ranke goes further</b> <span>A repository's history is its own. A squash or a force-push drops what it drops, and nothing in the repository links a commit to the scan that passed it, the ticket that asked for it, or the decision that shipped it.</span></li>
 			<li><b>Together</b> <span><code>ranke-git</code> snapshots a repository into an archive, byte-identical, and the commits sit beside the other records of the same release. This is the one adapter that exists today.</span></li>
+			<li class="terms"><b>Terms</b> <span>Self-hosted. Open source under GPL-2.0, that version and no later one, which <code>COPYING</code> states in Torvalds' own words. Free.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://git-scm.com/">git-scm.com</a></p>
 	</details>
@@ -47,6 +53,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>Versioning as a workflow on a schema'd knowledge graph, shipping today. Branch a whole database, merge it back, query any past state.</span></li>
 			<li><b>Where Ranke goes further</b> <span>The <a href="/papers.html#foundation">foundation paper</a> puts the difference at what changed against why. TerminusDB records the revisions and carries no derivation chain, no archive of the sources a revision was built from, and no contributor whose authorship is verifiable.</span></li>
 			<li><b>Together</b> <span>Both hold a versioned graph. An archive beneath one would keep the sources its revisions were drawn from.</span></li>
+			<li class="terms"><b>Terms</b> <span>Self-hosted, or TerminusCMS as a hosted service. Open source under Apache 2.0, which replaced GPLv3 with v4.0 in December 2020. Free to run yourself; the hosted tiers are paid above a free one.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://terminusdb.com/">terminusdb.com</a></p>
 	</details>
@@ -66,6 +73,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>Query planning, traversal performance, and the tooling built around them over two decades. An archive kept in Neo4j inherits all of it.</span></li>
 			<li><b>Where Ranke goes further</b> <span>A property graph holds the current value of a property. A Ranke-Graph holds every claim ever made about it, each signed, each citing what it was built from, and each permanent.</span></li>
 			<li><b>Together</b> <span>Neo4j is one of the backends RankeDB writes to, and Graphiti runs on it as well: one store underneath two disciplines.</span></li>
+			<li class="terms"><b>Terms</b> <span>Self-hosted, or AuraDB in the cloud. Two editions: Community is open source under GPL-3.0, Enterprise is closed and licensed commercially. Community and an AuraDB free tier cost nothing, and clustering, online backup and role-based access control are Enterprise features priced through sales.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://neo4j.com/">neo4j.com</a></p>
 	</details>
@@ -81,6 +89,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>A schema, Datalog queries and transactions, with time travel on the ordinary query path.</span></li>
 			<li><b>Where Ranke goes further</b> <span>One timeline, and it is the system's own. Datomic records when a fact was asserted or retracted, and not who derived it from what. The <a href="/papers.html#foundation">foundation paper</a> calls that temporal history against epistemic history.</span></li>
 			<li><b>Together</b> <span>An immutable store beneath an archive is a reasonable fit, with the archive supplying the derivation the datoms have nowhere to put.</span></li>
+			<li class="terms"><b>Terms</b> <span>Self-hosted as Datomic Pro, or Datomic Cloud on AWS. Closed source and free at once: since April 2023 Nubank has shipped the binaries under Apache 2.0 with no licence fees, and answered plainly that the source is not following them. Paid support is sold separately.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://www.datomic.com/">datomic.com</a></p>
 	</details>
@@ -96,6 +105,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>Bitemporal SQL with time travel as an ordinary query, over a schemaless document model.</span></li>
 			<li><b>Where Ranke goes further</b> <span>Those two axes are the archive's two dates under other names, and archival practice reached them first; the Library of Congress standardised the uncertain half as EDTF. What the schema has no place for is the derivation: which claims a record was built from, and who built it.</span></li>
 			<li><b>Together</b> <span>Bitemporality is the shared idea. An archive adds the chain of derivation to it.</span></li>
+			<li class="terms"><b>Terms</b> <span>Self-hosted, on your own hardware or your own cloud account. Open source under MPL-2.0. Free; JUXT, the consultancy behind it, sells support.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://xtdb.com/">xtdb.com</a></p>
 	</details>
@@ -118,8 +128,10 @@ url: /neighbours.html
 			surface, a reasoner, validation, policy, and Raft for distributed deployment. Ranke has a data
 			structure and two reference implementations.</span></li>
 			<li><b>Where Ranke goes further</b> <span>The sharpest line is the licence. Fluree's engine
-			is source-available under the Business Source Licence, which reserves commercial use until its
-			change date, with a managed platform sold above it. Ranke's implementations are Apache 2.0 and
+			is source-available under the Business Source Licence, which holds back the hosted-service use
+			until each version's change date four years out, with a managed platform sold above it. The
+			licence still governs who may do what, and for four years it is Fluree who decides. Ranke's
+			implementations are Apache 2.0 and
 			its papers CC BY 4.0, so an archive can be run, forked and outlived by whoever holds it. After
 			that comes signing: optional in Fluree, so authorship is a feature a transaction may carry,
 			where Ranke folds the signature into a claim's identity and an unsigned claim is not a claim.
@@ -128,6 +140,10 @@ url: /neighbours.html
 			<li><b>Together</b> <span>The nearest neighbour among the databases. Underneath the platform
 			framing sits a hash-chained log with optional verification, and that log is a reasonable store
 			beneath an archive.</span></li>
+			<li class="terms"><b>Terms</b> <span>Self-hosted, or Fluree's own platform. Source-available
+			under the Business Source Licence 1.1: each version turns Apache 2.0 four years after it
+			ships, and until then the grant covers every use except offering Fluree itself as a hosted
+			Database Service. Free to run; the platform above it is paid.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://flur.ee/">flur.ee</a></p>
 	</details>
@@ -147,6 +163,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>Extraction, entity resolution and contradiction handling are built and running, and retrieval is tuned to hand an agent one current view. Nothing in Ranke does this today: the workers that would populate its semantic layer are a <a href="/papers.html#unwritten">paper still to be written</a>.</span></li>
 			<li><b>Where Ranke goes further</b> <span>Ranke carries the semantic layer in the structure itself, as relations held as claims and read with their direction. Graphiti updates entity summaries destructively, and holds provenance as annotation on the knowledge graph rather than as its content, where a Ranke-Graph keeps the sources inside itself, content-addressed, and every claim about them stays exactly as written.</span></li>
 			<li><b>Together</b> <span>The closest neighbour here, and the <a href="/papers.html#foundation">foundation paper</a> says so: it reads the Ranke-Graph as an extension of Graphiti's philosophy, adding immutability, sources kept within the graph, and provenance as the substrate. Both run on Neo4j, so one store can hold either.</span></li>
+			<li class="terms"><b>Terms</b> <span>Two answers, because the layers part company. Graphiti, the engine underneath, is open source under Apache 2.0 and self-hostable, given a graph database of its own to run on. Zep itself is a cloud service: its Community Edition was wound down in April 2025, the company saying the open and the commercial product had each constrained the other, so what sits above Graphiti is hosted only, free to a monthly credit allowance and paid past it.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://www.getzep.com/">getzep.com</a></p>
 	</details>
@@ -166,6 +183,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>For the release-documentation case this site opens with, Chainloop is the more finished answer today: pipeline integrations, contracts that fail a build when evidence goes missing, policy evaluation, and compliance reporting on top. Ranke has one adapter, for git.</span></li>
 			<li><b>Where Ranke goes further</b> <span>Three places. Its scope is the software lifecycle, so the mail thread, the GPS trace and the analysis written a year later have nowhere to go. Its graph belongs to the service: the attestations verify on their own with cosign, while the relationships between them live in the control plane's database, where a Ranke claim carries its edges inside the record its id is computed over. And it decides, by design, because a contract that fails a build is the product; the <a href="/papers.html#foundation">foundation paper</a> draws the opposite line, that the graph documents and does not decide.</span></li>
 			<li><b>Together</b> <span>An adapter over Chainloop would be the shortest path from a working pipeline to an archive that outlives the tool. The gate stays in the pipeline where it belongs, and the record of what it saw goes somewhere a later claim can contradict it with both staying readable.</span></li>
+			<li class="terms"><b>Terms</b> <span>Self-hosted, or hosted at <code>app.chainloop.dev</code>. Open core: the core is Apache 2.0, and the installer's <code>--oss</code> flag is what marks the boundary, since leaving it off installs the enterprise edition instead. Free core, paid enterprise.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://chainloop.dev/">chainloop.dev</a></p>
 	</details>
@@ -181,6 +199,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>One question, worked all the way through, inside the in-toto and CNCF ecosystem: attestation formats a wider community already verifies, and policy evaluation against them.</span></li>
 			<li><b>Where Ranke goes further</b> <span>Ranke takes any source. The attestation, the mail thread that argued about it, the GPS trace, the analysis written a year later: one archive, one derivation model.</span></li>
 			<li><b>Together</b> <span>An attestation is a signed claim that cites its inputs, which is a Ranke claim in every respect that matters. An adapter over Archivista would put supply-chain evidence beside everything else the release touched.</span></li>
+			<li class="terms"><b>Terms</b> <span>Self-hosted. Open source under Apache 2.0: TestifySec built both and donated them to in-toto under the CNCF, so the code is the community's. Free, and TestifySec sells managed hosting and support beside it under its own terms.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://github.com/in-toto/archivista">github.com</a></p>
 	</details>
@@ -196,6 +215,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>Normalising the ecosystem's formats into one graph and answering questions across them: which artefact carries which dependency, and where the data is missing altogether. It is an OpenSSF project with adopters, where Ranke has no supply-chain adapter at all.</span></li>
 			<li><b>Where Ranke goes further</b> <span>GUAC builds a current picture from documents it re-reads. Ranke keeps the documents, dates them twice, and keeps every earlier picture beside the current one.</span></li>
 			<li><b>Together</b> <span>GUAC's collectors and Ranke's adapters work the same seam. A graph GUAC built is a derivation like any other, and filing it as one would keep the answer it gave on the day it was asked.</span></li>
+			<li class="terms"><b>Terms</b> <span>Self-hosted, with a Helm chart to stand it up. Open source under Apache 2.0, an OpenSSF incubating project since before its 1.0 in June 2025. Free; Kusari, which started it with Google and Purdue, sells a commercial platform built on it.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://guac.sh/guac/">guac.sh</a></p>
 	</details>
@@ -215,6 +235,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>Getting the evidence off the machines at all: agents, a query language for artefacts, and the scale to run it over a fleet while an incident is live. Ranke has nothing that collects anything.</span></li>
 			<li><b>Where Ranke goes further</b> <span>What a hunt returns is a collection. In a Ranke-Graph each item would carry a contributor, an entry date, a presumed date of origin, and edges to whatever it was derived from, so an analysis of it is filed beside it rather than kept elsewhere. The structure holds that for anything ingested; no adapter for Velociraptor exists.</span></li>
 			<li><b>Together</b> <span>Collection and custody are different jobs, and Velociraptor is among the first adapters an archive of this kind would want.</span></li>
+			<li class="terms"><b>Terms</b> <span>Self-hosted. Open source under AGPL-3.0, and it stayed that way through Rapid7's acquisition of the project in April 2021. Free, with no per-seat fee; Rapid7 sells support, and gates a feature-restricted build inside the top tier of its own platform, where the gRPC API is withheld and quarantine is switched off.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://docs.velociraptor.app/">docs.velociraptor.app</a></p>
 	</details>
@@ -230,6 +251,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>The analytical surface of an investigation in progress: correlation across sources, collaborative annotation, and a timeline a human can work. Ranke offers no analysis tooling of any kind.</span></li>
 			<li><b>Where Ranke goes further</b> <span>A sketch is built for a case. An archive would keep the evidence base across cases, hold each annotation as a claim with its own author and time, and keep the sources the timeline was derived from. No adapter for Timesketch exists.</span></li>
 			<li><b>Together</b> <span>A sketch is a derivation over sources. Filed as claims, the reasoning of an investigation would survive the investigation.</span></li>
+			<li class="terms"><b>Terms</b> <span>Self-hosted, and that is the only way: Google runs no hosted Timesketch, and the third-party cloud images are somebody else's packaging of the same software. Open source under Apache 2.0. Free.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://timesketch.org/">timesketch.org</a></p>
 	</details>
@@ -245,6 +267,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>The case as a working object, with the reporting that has to come out of it at the end.</span></li>
 			<li><b>Where Ranke goes further</b> <span>Custody in IRIS is a field on a record inside one case. In a Ranke-Graph custody is the structure: the contributor is signed into the claim's identity, and a claim cannot be written without citing what it rests on.</span></li>
 			<li><b>Together</b> <span>The same discipline at two altitudes. A case would be a branch, and its evidence entries claims.</span></li>
+			<li class="terms"><b>Terms</b> <span>Self-hosted, five Docker services. Open source under LGPL-3.0. Free, with no paid edition and nothing held back from it; support is arranged through the project's OpenCollective, where a sponsorship tier buys hours of it.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://www.dfir-iris.org/">dfir-iris.org</a></p>
 	</details>
@@ -264,6 +287,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>Keeping bytes readable for decades. Format identification and normalisation, fixity checking, and the ingest workflow archivists actually run. Ranke has none of this.</span></li>
 			<li><b>Where Ranke goes further</b> <span>Ranke is concerned with what records say and where claims came from: derivation as queryable data, with later analysis filed as claims of its own.</span></li>
 			<li><b>Together</b> <span>Preservation and provenance are different jobs on the same material. An archival package is a source like any other.</span></li>
+			<li class="terms"><b>Terms</b> <span>Self-hosted, or Artefactual's hosted Digital Preservation Service, which places the storage in a region you pick and replicates it to two more. Open source under AGPL-3.0. Free to download and run; the hosting, the storage and the support are what Artefactual sells.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://www.archivematica.org/">archivematica.org</a></p>
 	</details>
@@ -283,6 +307,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>Distribution and storage at scale, which Ranke does not attempt: a DAG of storage chunks, and a network to move them.</span></li>
 			<li><b>Where Ranke goes further</b> <span>The <a href="/papers.html#foundation">foundation paper</a> draws the line at what the links carry. In a Ranke-Graph the Merkle links are the provenance edges, so each id commits to the full closure of claims a record was built from, and content addressing and provenance coincide rather than sit in separate layers.</span></li>
 			<li><b>Together</b> <span>The Universe is a content-addressed key/value store, so a content-addressed network is one shape it can take.</span></li>
+			<li class="terms"><b>Terms</b> <span>Self-hosted node. Kubo, the Go implementation, is dual-licensed MIT or Apache 2.0, at the user's choice. Free to run, and keeping content reachable is where money enters: a pinning service charges for it, or an IPFS Cluster of your own does the same job on your hardware.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://ipfs.tech/">ipfs.tech</a></p>
 	</details>
@@ -302,6 +327,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>Running public infrastructure with wide adoption and mature tooling.</span></li>
 			<li><b>Where Ranke goes further</b> <span>A Sigstore signature is a detached attestation about content. Ranke folds the signature into the record its address names, so a claim's identity commits to its author as well as to its bytes.</span></li>
 			<li><b>Together</b> <span>Ranke anchors into logs of this kind for time rather than replacing them.</span></li>
+			<li class="terms"><b>Terms</b> <span>A public-good instance of Fulcio and Rekor, operated by the OpenSSF community, and the whole stack can be run privately instead. Open source under Apache 2.0, which the OpenSSF charter requires of every project it holds. Free, with no paid tier anywhere in it; the commercial products built on these primitives, Chainguard's and GitHub's, are other companies' offerings rather than Sigstore's.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://www.sigstore.dev/">sigstore.dev</a></p>
 	</details>
@@ -317,6 +343,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>A signed standard with camera and tool vendors behind it, addressing provenance where it is hardest, in media that is copied and re-encoded.</span></li>
 			<li><b>Where Ranke goes further</b> <span>A C2PA manifest travels with one asset. A Ranke claim sits in a graph with everything else that asset relates to, and later claims can cite, qualify or contradict it.</span></li>
 			<li><b>Together</b> <span>The <a href="/papers.html#foundation">foundation paper</a> proposes COSE_Sign1 for a claim's envelope, which is what a C2PA claim signature already is. A manifest is a source that arrives with its provenance intact.</span></li>
+			<li class="terms"><b>Terms</b> <span>A specification rather than a system, so there is nothing to host. Royalty-free, which is what lets open and closed implementations both exist, and the <code>c2pa-rs</code> SDK is Apache 2.0 or MIT. Free to implement, and the cost sits one step further on: credentials that validate against the C2PA trust list need a signing certificate from an authority on that list, priced by the authority under its own commercial terms.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://c2pa.org/">c2pa.org</a></p>
 	</details>
@@ -332,6 +359,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>The discipline of a public log: independent monitors, inclusion proofs, and in Certificate Transparency's case a decade of operation at internet scale.</span></li>
 			<li><b>Where Ranke goes further</b> <span>A transparency log orders statements and proves inclusion. It does not say what a statement was derived from, where in a Ranke-Graph the citation is a condition of writing at all.</span></li>
 			<li><b>Together</b> <span>An anchor in such a log fixes a whole closure in time, which is what the <a href="/papers.html#foundation">foundation paper</a>'s anchoring rests on.</span></li>
+			<li class="terms"><b>Terms</b> <span>Specifications, free to read and to implement. Certificate Transparency is RFC 9162, published as an Experimental protocol; SCITT is still an Internet-Draft, at revision 22, so what it says can change under an implementer. Trillian, the Merkle-tree log Certificate Transparency is usually run on, is Apache 2.0. Operating a log is where the expense lands, and it is the reason log operators are few.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://datatracker.ietf.org/wg/scitt/about/">datatracker.ietf.org</a></p>
 	</details>
@@ -351,6 +379,7 @@ url: /neighbours.html
 			<li><b>Where it goes further</b> <span>A working publishing practice in the sciences, with a network, conventions and a community that uses it.</span></li>
 			<li><b>Where Ranke goes further</b> <span>They are a flat collection of independent assertions: no derivation DAG connecting them through chains of processing, and no semantic graph layer.</span></li>
 			<li><b>Together</b> <span>A nanopublication is already a claim with provenance, so ingesting one would lose nothing.</span></li>
+			<li class="terms"><b>Terms</b> <span>A decentralised server network anybody can publish to, and anybody can join by running a server of their own. <code>nanopub-java</code>, the reference library, is MIT. Free throughout, and the nanopublications themselves carry their own licences, most often CC0 or CC BY.</span></li>
 		</ul>
 		<p class="nb-visit"><a href="https://nanopub.net/">nanopub.net</a></p>
 	</details>
