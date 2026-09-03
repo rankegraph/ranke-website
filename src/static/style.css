@@ -203,6 +203,10 @@ h3.sub {
 .props b { display: block; color: var(--text); }
 .props span { color: var(--muted); }
 
+/* The terms run the width of the list rather than taking half of a row, so an
+   odd fifth answer sits under the two columns instead of widowing beside one. */
+.props .terms { grid-column: 1 / -1; }
+
 /* ── cards ──────────────────────────────────────────────────────────── */
 
 .cards { display: grid; gap: 1.25rem; }

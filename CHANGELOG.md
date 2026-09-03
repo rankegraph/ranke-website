@@ -11,12 +11,19 @@ requires, provides, or removes; rewording does not.
 time.** `/neighbours.html` groups them by the tradition each comes from, version
 control through databases, agent memory, supply-chain evidence, incident
 forensics, preservation, content addressing and transparency logs, and answers
-the same four questions about every one: what it is for, where it goes further
-than Ranke, where Ranke goes further, and how the two compose. Each entry states
-where the other system is further along, and the page says once that the
-compositions are design sketches, since `ranke-git` is the only adapter that
-exists. Nineteen project logos are committed under `src/static/assets/logos/` to
-identify the projects they name.
+the same five questions about every one: what it is for, where it goes further
+than Ranke, where Ranke goes further, how the two compose, and the terms it
+comes on. The terms say whether a system is self-hosted or reached as a service,
+whether its source is open, and what it costs, stated in full because a single
+word would lose the truth: Datomic is closed source and free, since Nubank ships
+the binaries under Apache 2.0 and not the source; Fluree's Business Source
+Licence withholds only the hosted-service use, and for four years per version;
+and C2PA is royalty-free to implement while a certificate that validates against
+its trust list is priced by the issuing authority. Each entry states where the
+other system is further along, and the page says once that the compositions are
+design sketches, since `ranke-git` is the only adapter that exists. Nineteen
+project logos are committed under `src/static/assets/logos/` to identify the
+projects they name.
 
 **A section of the landing page indexes those systems by their logos.**
 "Similar technologies" carries a short paragraph and a grid of marks, each
