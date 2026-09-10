@@ -7,10 +7,19 @@ requires, provides, or removes; rewording does not.
 
 ## Unreleased
 
-**A page of neighbours compares the project against nineteen systems, one at a
+**The landing page states where Ranke stops and where tooling begins.** The
+hero promises the keeping — every record, structured and navigable, with
+everything it rests on — and names the two ways an answer comes: a client
+traversing the graph in place, or a scoped export handed to the analysis
+system of your choice. A paragraph under 'What Ranke does with it' spells that
+boundary out, and the cards section returns to say what runs today, `ranke-git`,
+and what comes next, further adapters and a generic filtered export. Release
+documentation remains as the hero's example rather than its promise.
+
+**A page of neighbours compares the project against twenty systems, one at a
 time.** `/neighbours.html` groups them by the tradition each comes from, version
-control through databases, agent memory, supply-chain evidence, incident
-forensics, preservation, content addressing and transparency logs, and answers
+control through databases, extracted knowledge graphs, supply-chain evidence,
+incident forensics, preservation, content addressing and transparency logs, and answers
 the same five questions about every one: what it is for, where it goes further
 than Ranke, where Ranke goes further, how the two compose, and the terms it
 comes on. The terms say whether a system is self-hosted or reached as a service,
@@ -21,9 +30,19 @@ Licence withholds only the hosted-service use, and for four years per version;
 and C2PA is royalty-free to implement while a certificate that validates against
 its trust list is priced by the issuing authority. Each entry states where the
 other system is further along, and the page says once that the compositions are
-design sketches, since `ranke-git` is the only adapter that exists. Nineteen
+design sketches, since `ranke-git` is the only adapter that exists. Twenty
 project logos are committed under `src/static/assets/logos/` to identify the
 projects they name.
+
+**DeepLethe's Utopia is among the neighbours, at `#utopia`.** An Apache 2.0
+bitemporal knowledge graph that extracts entities and facts from documents
+against an editable ontology, holds provenance on every fact, corrects by
+supersession rather than overwrite, and carries precision on each end of a
+validity interval. It is the closest structural neighbour on the page, and the
+entry says so: the foundation paper names Graphiti as the nearest because it was
+written before Utopia existed. The section holding it and Zep is now "Extracted
+knowledge graphs", since Utopia's own agent memory is a roadmap item and "agent
+memory" described neither system's whole job.
 
 **A section of the landing page indexes those systems by their logos.**
 "Similar technologies" carries a short paragraph and a grid of marks, each

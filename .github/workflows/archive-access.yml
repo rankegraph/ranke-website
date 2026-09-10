@@ -1,0 +1,101 @@
+name: Archive access
+
+# Proves this repository can act as its own account in the Ranke archive, before
+# anything tries to write to it. A rejected contribution tells you only that it
+# was rejected; this separates the three ways the access half goes wrong — a
+# token the archive will not authenticate, a token that authenticates as the
+# wrong account, and an account holding no right to write its branch — and it
+# does so by reading, so it can be run as often as you like against a live
+# archive without touching what is in it.
+#
+# Dispatch only. Nothing here builds or publishes, the answer changes when the
+# archive's configuration changes rather than when this tree does, and the
+# archive is a service this repository does not control: a run going red on a
+# push would report the archive's day, not this repository's.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  # The entire credential. GitHub mints a fresh token for this run and the
+  # archive verifies it against GitHub's JWKS, so this repository stores no key
+  # for the archive and holds nothing that outlives the job.
+  id-token: write
+
+jobs:
+  whoami:
+    runs-on: ubuntu-latest
+    # No checkout: the question is about this run's identity, and nothing in the
+    # tree is read to ask it.
+    steps:
+      - name: Ask the archive who this run is
+        env:
+          # The audience the archive's config pins, and the one thing most
+          # easily got wrong: a token minted for any other audience is refused
+          # with no hint as to why.
+          ARCHIVE: https://archive.rankegraph.org
+          # Through the environment rather than as ${{ }} inside the script, so
+          # nothing GitHub supplies is ever parsed as shell.
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -uo pipefail
+
+          # The archive names an account after the token's "repository" claim,
+          # and the branch that account may write after the repository, with '_'
+          # for '-': a branch name takes lowercase letters, digits and
+          # underscore alone, so rankegraph/ranke-website writes ranke_website.
+          branch=$(printf '%s' "${REPOSITORY#*/}" | tr '-' '_')
+
+          # id-token: write is what puts these two in the environment. They are
+          # the request that mints a token, and they are good for this run only.
+          claim=$(curl -fsS \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=$ARCHIVE" | jq -r '.value')
+          if [ -z "$claim" ] || [ "$claim" = "null" ]; then
+            echo "::error::GitHub minted no OIDC token, so nothing was asked of the archive. Is 'id-token: write' still granted to this job?"
+            exit 1
+          fi
+
+          status=$(curl -sS -o body.json -w '%{http_code}' --max-time 20 \
+            -H "Authorization: Bearer $claim" "$ARCHIVE/system/whoami") || status=000
+
+          case "$status" in
+            200) ;;
+            401)
+              echo "::error::$ARCHIVE authenticated nothing (401). The token was minted for audience $ARCHIVE, so what remains is the archive not naming an account for $REPOSITORY, or naming it under a different claim."
+              exit 1
+              ;;
+            000|5??)
+              # The archive being down says nothing about this repository's
+              # access, so it is reported and not failed — the same treatment
+              # the release workflow gives the deploy hook.
+              echo "::warning::$ARCHIVE did not answer (status $status). That is the archive's availability rather than this repository's access, so nothing is proved either way."
+              exit 0
+              ;;
+            *)
+              echo "::error::$ARCHIVE answered $status, which whoami does not: it answers 200 or 401."
+              cat body.json
+              exit 1
+              ;;
+          esac
+
+          # grants and caveats are reported apart rather than intersected: a
+          # request passes when the account's grants allow it and every caveat
+          # still does, so both are printed to explain a refusal.
+          account=$(jq -r '.account' body.json)
+          echo "account: $account"
+          echo "grants:  $(jq -r '.grants | join(", ")' body.json)"
+          echo "caveats: $(jq -r 'if (.caveats | length) == 0 then "none" else (.caveats | join(", ")) end' body.json)"
+
+          refused=0
+          if [ "$account" != "$REPOSITORY" ]; then
+            echo "::error::the token authenticated as $account, and this is $REPOSITORY. The archive takes the account from the token's repository claim, so the two disagreeing means it holds an account under some other name."
+            refused=1
+          fi
+          if ! jq -e --arg grant "C $branch" 'any(.grants[]; . == $grant)' body.json >/dev/null; then
+            echo "::error::$account holds no \"C $branch\" grant, so it may authenticate and still write nothing. Granting it is a change to the archive's config and a redeploy."
+            refused=1
+          fi
+          [ "$refused" -eq 0 ] || exit 1
+
+          echo "$account may contribute to $branch — the access half is settled, and no key was stored to settle it."
