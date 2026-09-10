@@ -1,0 +1,102 @@
+name: Archive
+
+# Files a release into the Ranke archive: the tag's tree as a snapshot, then the
+# release run's log and the assets it published, attached against that tag.
+#
+# Its own workflow rather than steps at the end of Release, because the log it
+# attaches is Release's own — which exists only once Release has finished.
+#
+# The same file suits every ranke-* repository. ranke-git reads the repository
+# and the project from the checkout's own origin, and the contributor from the
+# signing key, so the only thing here naming this repository is its archive
+# branch.
+on:
+  workflow_run:
+    workflows: [Release]
+    types: [completed]
+
+permissions:
+  contents: read   # the tag's tree, and the assets the release published
+  actions: read    # the log of the run that triggered this one
+  id-token: write  # the archive credential, minted per run and stored nowhere
+
+jobs:
+  archive:
+    # A failed release published nothing there is any point recording.
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    env:
+      ARCHIVE: https://archive.rankegraph.org
+      # Release triggers on tag pushes alone, so workflow_run hands the tag over
+      # in head_branch. Everything below is named by that tag.
+      TAG: ${{ github.event.workflow_run.head_branch }}
+      RUN_ID: ${{ github.event.workflow_run.id }}
+      REPOSITORY: ${{ github.repository }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # The one stored secret. It signs the claims, and names the contributor
+      # too: ranke-git signs as whichever contributor on the branch carries this
+      # key's public half. Read straight out of the environment by
+      # signing_key's env: source below, so it reaches no file and no argument.
+      RANKE_SIGNING_KEY: ${{ secrets.RANKE_SIGNING_KEY }}
+    steps:
+      - name: Check out the tag
+        uses: actions/checkout@v4
+        with:
+          # Named explicitly: workflow_run runs against the default branch, and
+          # the snapshot would otherwise archive the wrong tree. Tags come too,
+          # since a checkout fetches none by default and every command below
+          # resolves this one under refs/tags.
+          ref: ${{ env.TAG }}
+          fetch-tags: true
+
+      - name: Install ranke-git
+        # Pinned: @latest would change what gets written with no commit saying
+        # so. The module's own go directive settles the toolchain.
+        run: |
+          set -euo pipefail
+          go install github.com/rankegraph/ranke-tools/ranke-git@v0.10.0
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - name: Write the ranke-git config
+        # The token is the one value with nowhere else to go: it would sit in the
+        # process list as an argument, so it goes in a file instead, and the
+        # standing values keep it company. Absent from it are the repository and
+        # the project, which ranke-git takes from the checkout's origin, and the
+        # signing key, which it reads from the environment.
+        run: |
+          set -euo pipefail
+          umask 077
+          token=$(curl -fsS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=$ARCHIVE" | jq -er '.value')
+          cat > ranke-git.yaml <<YAML
+          server: "$ARCHIVE"
+          token: "$token"
+          signing_key: env:RANKE_SIGNING_KEY
+          branch: "$(printf '%s' "${REPOSITORY#*/}" | tr '-' '_')"
+          clone: "$PWD"
+          YAML
+
+      - name: Snapshot the tag
+        # One commit's tree, byte-exact and content-deduplicated, so a re-run
+        # contributes nothing and a later force-push cannot alter it.
+        run: ranke-git snapshot --config ranke-git.yaml --git-tag "$TAG"
+
+      - name: Attach the log and the published assets
+        # How the release was built, and what it shipped — so a restore can
+        # serve the bytes visitors got without GitHub still holding them.
+        # attach reads stdin when given no path, and a directory attaches every
+        # file under it, each its own claim; site.tar.gz.sha256 sits beside
+        # site.tar.gz there, so it is folded into that artifact's checksum
+        # rather than filed as an attachment of its own.
+        run: |
+          set -euo pipefail
+          gh run view "$RUN_ID" --log | ranke-git attach --config ranke-git.yaml \
+            --git-tag "$TAG" --type build_log --name "$TAG release log"
+          gh release download "$TAG" --dir assets
+          ranke-git attach --config ranke-git.yaml --git-tag "$TAG" --type artifact assets
+
+      - name: Remove the credential
+        # Always: a failed step above leaves the workspace behind, and the token
+        # in there should not outlive the job.
+        if: always()
+        run: rm -f ranke-git.yaml
