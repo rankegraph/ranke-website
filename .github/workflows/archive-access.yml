@@ -8,12 +8,19 @@ name: Archive access
 # does so by reading, so it can be run as often as you like against a live
 # archive without touching what is in it.
 #
-# Dispatch only. Nothing here builds or publishes, the answer changes when the
-# archive's configuration changes rather than when this tree does, and the
-# archive is a service this repository does not control: a run going red on a
-# push would report the archive's day, not this repository's.
+# Run it by hand, and on any push that changes this file. It stays off every
+# other push because the answer moves when the archive's configuration moves
+# rather than when this tree does, and because the archive is a service this
+# repository does not control: a red run on an unrelated push would report the
+# archive's day rather than this repository's. Watching itself is what makes it
+# runnable from a branch at all — GitHub registers workflow_dispatch only for
+# files already on the default branch, while a push runs the definition it
+# just received.
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/archive-access.yml
 
 permissions:
   contents: read
@@ -92,9 +99,43 @@ jobs:
             echo "::error::the token authenticated as $account, and this is $REPOSITORY. The archive takes the account from the token's repository claim, so the two disagreeing means it holds an account under some other name."
             refused=1
           fi
-          if ! jq -e --arg grant "C $branch" 'any(.grants[]; . == $grant)' body.json >/dev/null; then
-            echo "::error::$account holds no \"C $branch\" grant, so it may authenticate and still write nothing. Granting it is a change to the archive's config and a redeploy."
-            refused=1
+
+          # The rights that reach this branch, gathered from every grant whose
+          # glob covers it rather than from one spec matched whole: "CR
+          # ranke_website" and "C ranke_website" beside "R *" both grant the
+          # same thing, and a grant renders its letters in CRUD order, so no
+          # single spelling is the one to look for. Reserved targets ($branches,
+          # $archive, $universe) name surfaces rather than branches and are
+          # skipped.
+          rights=$(jq -r --arg branch "$branch" '
+            def covers($glob): $glob == "*" or ($branch | test(
+              "^" + ($glob | gsub("\\*"; "[a-z0-9_]*") | gsub("\\?"; "[a-z0-9_]")) + "$"));
+            [ .grants[] | split(" ") | select((.[1] | startswith("$")) == false)
+              | select(covers(.[1])) | .[0] ] | add // ""' body.json)
+
+          case "$rights" in
+            *C*) ;;
+            *) echo "::error::$account may not contribute to $branch — the rights reaching it are \"${rights:-none}\". It can authenticate and still write nothing; granting C on that branch is a change to the archive's config and a redeploy."
+               refused=1 ;;
+          esac
+          case "$rights" in
+            *R*) ;;
+            *) echo "::error::$account cannot read $branch — the rights reaching it are \"${rights:-none}\". ranke-git queries the branch before writing to it, to reuse the claims already there, so C alone is not enough."
+               refused=1 ;;
+          esac
+          # Least privilege is the point of a per-repository account, so a grant
+          # reaching past this one branch is worth saying out loud. It warns
+          # rather than fails: the archive's config is not this repository's to
+          # fix, and access still works. ranke-git scopes every query it makes
+          # to the branch it writes, so nothing here needs a wider read.
+          beyond=$(jq -r --arg branch "$branch" \
+            '[.grants[] | select((split(" ") | .[1]) != $branch)] | join(", ")' body.json)
+          if [ -n "$beyond" ]; then
+            echo "::warning::$account also holds: $beyond. Those reach past $branch, and a workflow contributing git snapshots and build logs reads only the branch it writes — so anything wider is more than it needs."
+          fi
+
+          if [ "$(jq -r '.caveats | length' body.json)" != "0" ]; then
+            echo "::warning::this credential carries caveats, which narrow the grants above — every one of them must allow a request too, so the rights reaching $branch may be less than \"$rights\"."
           fi
           [ "$refused" -eq 0 ] || exit 1
 
