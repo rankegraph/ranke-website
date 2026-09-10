@@ -7,6 +7,13 @@ requires, provides, or removes; rewording does not.
 
 ## Unreleased
 
+**`make dev` serves from memory, so a dev server and `make check` can run at
+once.** Hugo's server renders to `publishDir` by default and injects a
+livereload script into what it writes, so a server left running filled `dist/`
+with pages referencing `/livereload.js`, and the link check failed on a file
+that exists only while the server is up. The target passes `--renderToMemory`,
+and `dist/` now holds what `make site` built.
+
 **The landing page states where Ranke stops and where tooling begins.** The
 hero is "Keeping today's records for tomorrow's tools": the archive is the
 stage before an analysis system, and the material outlives whichever one is
