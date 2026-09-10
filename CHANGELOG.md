@@ -8,13 +8,22 @@ requires, provides, or removes; rewording does not.
 ## Unreleased
 
 **The landing page states where Ranke stops and where tooling begins.** The
-hero promises the keeping — every record, structured and navigable, with
-everything it rests on — and names the two ways an answer comes: a client
-traversing the graph in place, or a scoped export handed to the analysis
-system of your choice. A paragraph under 'What Ranke does with it' spells that
-boundary out, and the cards section returns to say what runs today, `ranke-git`,
-and what comes next, further adapters and a generic filtered export. Release
-documentation remains as the hero's example rather than its promise.
+hero is "Keeping today's records for tomorrow's tools": the archive is the
+stage before an analysis system, and the material outlives whichever one is
+chosen. It promises the
+keeping — every record, structured and navigable, with everything it rests on
+— and names the two ways an answer comes: a client traversing the graph in
+place, or a scoped export handed to the analysis system of your choice. Two paragraphs under 'What Ranke does with it' spell
+that boundary out: the archive stays behind both ways in, so a system adopted
+next year, or one still to be written, starts from the whole record; and
+choosing what goes into a cut is archive work the graph carries natively, since
+a claim states what it rests on and the selection can be filed as a claim too.
+The cards section returns to say what runs today, `ranke-git`, and what comes
+next, further adapters and a generic filtered export. Release documentation
+serves as the hero's example, and the sources named as
+next are the ones an enterprise loses to a retention policy it does not
+control: email and chat threads, issue trackers, build logs, and scan reports.
+`/docs/getting-started/` names the same set.
 
 **A page of neighbours compares the project against twenty systems, one at a
 time.** `/neighbours.html` groups them by the tradition each comes from, version
