@@ -54,7 +54,7 @@ jobs:
         # so. The module's own go directive settles the toolchain.
         run: |
           set -euo pipefail
-          go install github.com/rankegraph/ranke-tools/ranke-git@v0.10.0
+          go install github.com/rankegraph/ranke-tools/ranke-git@v0.11.0
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
       - name: Write the ranke-git config
