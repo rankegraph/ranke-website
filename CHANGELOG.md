@@ -7,6 +7,12 @@ requires, provides, or removes; rewording does not.
 
 ## Unreleased
 
+**The downloads page names `ranke-client`.** A ranke-db release carries that
+command line beside the server, where the page listed the server and the
+explorer alone. It reads an archive — the account a credential resolves to, the
+branch table, a branch's contributors — and provisions the branches and
+contributors that write to one.
+
 **The demo page states that the ingestion runs.** This website's releases enter
 the archive as they are published — the tagged source, and the log of the build
 that published it, both citing the version they belong to. The notice on that
