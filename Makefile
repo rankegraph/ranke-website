@@ -122,9 +122,13 @@ site: | place ## Build the whole site into dist/
 	@HUGO_PARAMS_VERSION='$(SITE_VERSION)' $(HUGO) --quiet --cleanDestinationDir
 	@echo ">> dist/ — $$(find dist -type f | wc -l) file(s), built from $(SITE_VERSION)"
 
+# --renderToMemory, because the server writes to publishDir otherwise, and what
+# it writes carries an injected livereload script. That is dist/, so a `make
+# check` running beside a dev server reads pages referencing /livereload.js and
+# fails on a link that resolves only while the server is up.
 dev: ## Build, then serve at http://localhost:1313 and rebuild as you edit
 	@$(SCRIPTS)/build-docs.sh
-	@HUGO_PARAMS_VERSION='$(SITE_VERSION)' $(HUGO) server
+	@HUGO_PARAMS_VERSION='$(SITE_VERSION)' $(HUGO) server --renderToMemory
 
 ##@ Documentation
 

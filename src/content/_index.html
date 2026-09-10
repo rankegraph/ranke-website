@@ -1,12 +1,12 @@
 ---
 title: "Ranke-Graph"
-description: "Everything you keep in one graph, where every answer traces back to the record it rests on. Git repositories today; email, GPS traces and build logs next."
+description: "An archive that keeps today's records for tomorrow's tools: everything in one graph, where every answer traces back to the record it rests on. Git repositories today; email, chat, tickets, build logs, and scan reports next."
 ---
 <section class="hero">
 	<div>
-		<h1>Every release, with its evidence, kept.</h1>
+		<h1>Keeping today's records for tomorrow's tools.</h1>
 		<p class="lead">
-A year later someone asks why you shipped with that CVE. The build logs have expired, the ticket is gone, the branch was squashed. Ranke keeps the whole record — the snapshot, the scan, the decision that was taken — and every answer points back at the document it came from.
+Some of the tools that will read your records have yet to be written, and the systems you use today each keep what suits them, for as long as it suits them: build logs expire, the ticket goes with the tracker, the branch is squashed. Ranke keeps the material itself — every record as it arrived, with who filed it, when, and what it was built from. It stays structured and navigable in the meantime, so an agent can walk the archive, and a scoped export hands what a question needs to the analysis system of your choice.
   </p>
 	</div>
 	<img class="illustration" src="assets/hero.webp" width="900" height="1026" alt="">
@@ -39,7 +39,7 @@ So every record carries two dates: when it entered the archive and its presumed 
   <p>
     Digital systems keep history: git every version of a file, an issue tracker every comment,
     a build system its logs. Each keeps its own, under its own policy: one squashes, one prunes
-    after ninety days, one is append-only, and several cannot be exported at all. The history is
+    after 90 days, one is append-only, and several cannot be exported at all. The history is
     scattered, and no system holds what runs across them.
   </p>
 </section>
@@ -60,12 +60,27 @@ So every record carries two dates: when it entered the archive and its presumed 
 	</p>
 	<p>
 		Ranke-Graph is a format. The graph is the content, and any store that holds
-		bytes under a key can hold it: a filesystem, S3, Postgres, Neo4j, or several at once. RankeDB
+		bytes under a key can hold it: a filesystem, S3, Postgres, Neo4j, or more than one at once. RankeDB
 		serves it and decides who may read and write. Without RankeDB the archive is still a set of
 		self-describing files.
 	</p>
+	<p>
+		Answering is a tool's job, and the archive gives it two ways in. A client traverses the
+		graph in place: a prompted agent, a worker built on the SDKs, anything that can follow an
+		edge to what a claim cites. Or an export hands a scoped cut to a system built for the
+		question — this year's mail for one, a release's evidence for another. The archive stays
+		behind both, so a system adopted next year, or one still to be written, starts from the
+		whole record.
+	</p>
+	<p>
+		Choosing what goes into a cut is archive work in itself, and the graph carries enough
+		structure to do it here. Every claim states what it rests on, so the archive can be
+		searched and walked without a knowledge system on top: an agent gathers the records a
+		question needs and says what it drew on. That selection can be filed as a claim of its
+		own, and a later reading can then see how the cut was made.
+	</p>
 </section>
-<!--
+
 <section>
 	<div class="cards">
 		<article class="card">
@@ -77,20 +92,20 @@ So every record carries two dates: when it entered the archive and its presumed 
 		</article>
 		<article class="card">
 			<div class="meta">Next</div>
-			<h3>Email, GPS traces, browser history, CI build logs</h3>
-			<p>Each of these needs an adapter: a small program that reads a source and turns it into claims. Every adapter widens the set of questions the archive can answer.</p>
+			<h3>More adapters, and a generic export</h3>
+			<p>Email and chat threads, issue trackers, CI build logs, and security scan reports each need an adapter: a small program that reads a source and turns it into claims. The export runs the other way — a filtered cut of the archive, serialised into formats other systems already read.</p>
 		</article>
 	</div>
 	<p>An agent can extend the graph as readily as read it. Its analysis runs on a branch of its own: it adds claims, cites the records it read, and leaves the sources untouched. Whoever reviews it later can see every record the analysis drew on.</p>
 </section>
-//-->
 
 <section>
 	<h2>Similar technologies</h2>
-	<p>Nineteen systems keep history in ways that overlap with this one, and two of them are
+	<p>Twenty systems keep history in ways that overlap with this one, and several of them are
 	further along at the job described above. The
 	<a href="/neighbours.html">neighbours</a> page takes each in turn: what it is for, where it
-	goes further than Ranke, where Ranke goes further, and how the two would compose.</p>
+	goes further than Ranke, where Ranke goes further, how the two would compose, and the terms
+	it comes on.</p>
 	<div class="logogrid">
 		<a href="/neighbours.html#git" title="git"><img src="/assets/logos/git.png" alt="git" width="96" height="96"></a>
 		<a href="/neighbours.html#terminusdb" title="TerminusDB"><img src="/assets/logos/terminusdb.png" alt="TerminusDB" width="96" height="96"></a>
@@ -99,6 +114,7 @@ So every record carries two dates: when it entered the archive and its presumed 
 		<a href="/neighbours.html#xtdb" title="XTDB"><img src="/assets/logos/xtdb.png" alt="XTDB" width="96" height="96"></a>
 		<a href="/neighbours.html#fluree" title="Fluree"><img src="/assets/logos/fluree.png" alt="Fluree" width="96" height="96"></a>
 		<a href="/neighbours.html#zep" title="Zep"><img src="/assets/logos/zep.png" alt="Zep" width="96" height="96"></a>
+		<a href="/neighbours.html#utopia" title="Utopia"><img src="/assets/logos/utopia.svg" alt="Utopia" width="96" height="96"></a>
 		<a href="/neighbours.html#chainloop" title="Chainloop"><img src="/assets/logos/chainloop.png" alt="Chainloop" width="96" height="96"></a>
 		<a href="/neighbours.html#archivista" title="Archivista"><img src="/assets/logos/archivista.png" alt="Archivista" width="96" height="96"></a>
 		<a href="/neighbours.html#guac" title="GUAC"><img src="/assets/logos/guac.png" alt="GUAC" width="96" height="96"></a>

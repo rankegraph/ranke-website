@@ -1,5 +1,17 @@
 # ranke-website — Agent Instructions
 
+## Starting a session
+
+A new session begins by learning the project, before any task:
+
+1. Run `make docs` to import every documentation part at the release
+   `src/data/parts.json` pins.
+2. Read every file under `src/docs/` in full — whole files, top to bottom,
+   with the Read tool rather than grep or sed excerpts. Depth of
+   understanding is what the session runs on; reading shallowly costs more
+   time than the reading saves.
+3. Read the website itself: the pages under `src/content/`.
+
 ## Changelog
 
 `CHANGELOG.md` records what each release changed for someone who depends on

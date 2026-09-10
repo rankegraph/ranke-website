@@ -150,7 +150,7 @@ url: /neighbours.html
 </section>
 
 <section>
-	<h2>Agent memory</h2>
+	<h2>Extracted knowledge graphs</h2>
 
 	<details class="nb" id="zep">
 		<summary>
@@ -167,6 +167,22 @@ url: /neighbours.html
 		</ul>
 		<p class="nb-visit"><a href="https://www.getzep.com/">getzep.com</a></p>
 	</details>
+
+	<details class="nb" id="utopia">
+		<summary>
+		<img class="nb-logo" src="/assets/logos/utopia.svg" alt="" width="96" height="96">
+		<span class="nb-name">Utopia</span>
+		<span class="nb-gist">Bitemporal knowledge graph over extracted documents, on an ontology it revises</span>
+		</summary>
+		<ul class="props">
+			<li><b>Purpose</b> <span>Utopia is DeepLethe's enterprise world model: one Rust binary and one Postgres that takes documents in, extracts entities and facts against an ontology you can edit, and keeps them in a bitemporal graph. Every fact records when it held in the world and where it came from, and correcting one closes the old version and links the new to it rather than overwriting. Five ontology packs ship inside the binary, PROV-O among them. Search fuses Tantivy and pgvector, answers cite the passage they came from, and any OpenAI-compatible endpoint serves the models, so a deployment runs air-gapped.</span></li>
+			<li><b>Where it goes further</b> <span>Nearly the whole working system. Entity resolution in three stages with a review queue and an undo on every merge, conflict detection that offers remedies rather than a verdict, forward-chaining derivation whose results carry the premises they came from, precision on each end of an interval so that <i>ended, date unknown</i> is held apart from <i>still holds</i>, and an RDF export in Turtle or JSON-LD written so that a regulator can read a base without the vendor's help. It is a product that installs and runs, where Ranke is a specification and two reference implementations, and the workers that would populate Ranke's semantic layer are a <a href="/papers.html#unwritten">paper still to be written</a>.</span></li>
+			<li><b>Where Ranke goes further</b> <span>The trust boundary. Utopia's provenance is fields the application maintains, so an export is worth what the deployment that produced it is worth, and the auditor its own design notes have in mind still has to trust the exporter. A Ranke claim is signed, and its id is computed over the closure of claims it cites, so authorship and derivation are checkable away from the system that recorded them. The decision ledger is append-only by policy; a Ranke-Graph is append-only by construction, and a correction is a further claim rather than a version the writer closed.</span></li>
+			<li><b>Together</b> <span>The closest structural neighbour on this page. Two timelines, provenance on every fact, correction by supersession, and uncertainty carried on the dates are the commitments the <a href="/papers.html#foundation">foundation paper</a> argues for, reached from enterprise knowledge rather than from archival practice — and the paper names Graphiti as the nearest neighbour because it was written before this existed. PROV-O is already in the box, which is one of the standards this format aligns with, so the two would meet on a vocabulary neither has to invent. An archive beneath it would hold the documents its facts were extracted from, content-addressed, and sign what its ledger records.</span></li>
+			<li class="terms"><b>Terms</b> <span>Self-hosted, one Rust binary and one Postgres, and offline by design. Open source under Apache 2.0. Free: the repository offers no paid edition and names no hosted service, and the enterprise items, SSO and backup among them, sit on the same public roadmap as everything else. It is v0.1, the schema moves between versions and migrations only roll forward, so a deployment pins an image and backs up before it upgrades.</span></li>
+		</ul>
+		<p class="nb-visit"><a href="https://github.com/deeplethe/utopia">github.com</a></p>
+	</details>
 </section>
 
 <section>
@@ -181,7 +197,7 @@ url: /neighbours.html
 		<ul class="props">
 			<li><b>Purpose</b> <span>Chainloop is an evidence store and policy engine for the software lifecycle. It collects attestations, SBOMs, VEX, SARIF and QA reports out of GitHub Actions, GitLab, Jenkins, CircleCI and TeamCity together with the build environment's own metadata, stores each attestation as a Sigstore bundle, keeps the materials in content-addressed storage, and evaluates Rego policies whose results are written into the attestation before it is signed. A Workflow Contract declares what evidence a pipeline has to produce.</span></li>
 			<li><b>Where it goes further</b> <span>For the release-documentation case this site opens with, Chainloop is the more finished answer today: pipeline integrations, contracts that fail a build when evidence goes missing, policy evaluation, and compliance reporting on top. Ranke has one adapter, for git.</span></li>
-			<li><b>Where Ranke goes further</b> <span>Three places. Its scope is the software lifecycle, so the mail thread, the GPS trace and the analysis written a year later have nowhere to go. Its graph belongs to the service: the attestations verify on their own with cosign, while the relationships between them live in the control plane's database, where a Ranke claim carries its edges inside the record its id is computed over. And it decides, by design, because a contract that fails a build is the product; the <a href="/papers.html#foundation">foundation paper</a> draws the opposite line, that the graph documents and does not decide.</span></li>
+			<li><b>Where Ranke goes further</b> <span>Three places. Its scope is the software lifecycle, so the mail thread, the incident report and the analysis written a year later have nowhere to go. Its graph belongs to the service: the attestations verify on their own with cosign, while the relationships between them live in the control plane's database, where a Ranke claim carries its edges inside the record its id is computed over. And it decides, by design, because a contract that fails a build is the product; the <a href="/papers.html#foundation">foundation paper</a> draws the opposite line, that the graph documents and does not decide.</span></li>
 			<li><b>Together</b> <span>An adapter over Chainloop would be the shortest path from a working pipeline to an archive that outlives the tool. The gate stays in the pipeline where it belongs, and the record of what it saw goes somewhere a later claim can contradict it with both staying readable.</span></li>
 			<li class="terms"><b>Terms</b> <span>Self-hosted, or hosted at <code>app.chainloop.dev</code>. Open core: the core is Apache 2.0, and the installer's <code>--oss</code> flag is what marks the boundary, since leaving it off installs the enterprise edition instead. Free core, paid enterprise.</span></li>
 		</ul>
@@ -197,7 +213,7 @@ url: /neighbours.html
 		<ul class="props">
 			<li><b>Purpose</b> <span>Archivista stores and serves signed in-toto attestations, and Witness produces them in the pipeline: what was built, from which inputs, by which steps. Together they answer supply-chain questions and feed policy checks.</span></li>
 			<li><b>Where it goes further</b> <span>One question, worked all the way through, inside the in-toto and CNCF ecosystem: attestation formats a wider community already verifies, and policy evaluation against them.</span></li>
-			<li><b>Where Ranke goes further</b> <span>Ranke takes any source. The attestation, the mail thread that argued about it, the GPS trace, the analysis written a year later: one archive, one derivation model.</span></li>
+			<li><b>Where Ranke goes further</b> <span>Ranke takes any source. The attestation, the mail thread that argued about it, the ticket that asked for it, the analysis written a year later: one archive, one derivation model.</span></li>
 			<li><b>Together</b> <span>An attestation is a signed claim that cites its inputs, which is a Ranke claim in every respect that matters. An adapter over Archivista would put supply-chain evidence beside everything else the release touched.</span></li>
 			<li class="terms"><b>Terms</b> <span>Self-hosted. Open source under Apache 2.0: TestifySec built both and donated them to in-toto under the CNCF, so the code is the community's. Free, and TestifySec sells managed hosting and support beside it under its own terms.</span></li>
 		</ul>
