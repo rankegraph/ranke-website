@@ -7,6 +7,12 @@ requires, provides, or removes; rewording does not.
 
 ## Unreleased
 
+**The demo page states that the ingestion runs.** This website's releases enter
+the archive as they are published — the tagged source, and the log of the build
+that published it, both citing the version they belong to. The notice on that
+page said the ingestion was still being built, and now says which repositories
+it covers, the rest to follow.
+
 **`make dev` serves from memory, so a dev server and `make check` can run at
 once.** Hugo's server renders to `publishDir` by default and injects a
 livereload script into what it writes, so a server left running filled `dist/`
